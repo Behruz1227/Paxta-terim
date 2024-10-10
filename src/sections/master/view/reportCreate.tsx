@@ -22,7 +22,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Iconify } from 'src/components/iconify';
 import { Inputs } from 'src/components/input/input';
-import { cottom_get, farmList, getDistirct, reposrtAdd } from 'src/hooks/api/url';
+import { cottom_get, farmList, getDistirct, report_time, reposrtAdd } from 'src/hooks/api/url';
 import useGet from 'src/hooks/get';
 import axios from 'axios';
 
@@ -30,6 +30,7 @@ const ReportView: React.FC = () => {
     const { get: getFarms, data: farmsData, isLoading: farmsLoading } = useGet();
     const { get: cottom, data: cottomData, isLoading: cottomLoading } = useGet();
     const { get: farmsLar, data: farmData, isLoading: farmLoading } = useGet();
+    const { get: reports, data: reportsTime, isLoading: reportsLoading } = useGet();
 
     const [farmId, setFarmId] = useState(''); // Store selected farmId
     const [selectedHudud, setSelectedHudud] = useState('');
@@ -47,6 +48,11 @@ const ReportView: React.FC = () => {
     useEffect(() => {
         getFarms(`${getDistirct}`);
     }, []);
+    useEffect(() => {
+        reports(`${report_time}`);
+    }, []);
+    console.log(reportsTime);
+
 
     useEffect(() => {
         if (farmId) {
@@ -79,13 +85,21 @@ const ReportView: React.FC = () => {
                 return [...prev, id];
             }
         });
-        setFarmId(farmId);  // Store the selected farmId
+        setFarmId(farmId);
     };
 
     const openModal = (id: string) => {
         setItemToDelete(id);
         setIsModalDelete(true);
     };
+
+    const machineStatusOptions = [
+        'DALA_TAYYOR_EMASLIGI_UCHUN',
+        'TASHKILOTCHILIK_YUQLIGI_UCHUN',
+        'SERVIS_XIZMATI_UCHUN',
+        'NOSOZLIGI_UCHUN',
+        'YOQILGI_YOQLIGI_UCHUN',
+    ];
 
     const closeModal = () => {
         setIsModalDelete(false);
@@ -99,19 +113,19 @@ const ReportView: React.FC = () => {
 
     const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
         setter(e.target.value);
-    }; 
+    };
 
     const handleFormSubmit = () => {
         const reportData = {
-            farmId: farmId, 
-            dialField: firstname ? parseInt(firstname) : 0, 
+            farmId: farmId,
+            dialField: firstname ? parseInt(firstname) : 0,
             cottonSize: lastName ? parseInt(lastName) : 0,
             machineActive: phoneNumber === 'true',
-            downTime: password ? parseInt(password) : 0, 
-            machineStatus: lavozimi, 
-            date: new Date().toISOString().split('T')[0], 
-            hour: parseInt(lavozimi.split(':')[0]), 
-            minute: parseInt(lavozimi.split(':')[1]), 
+            downTime: password ? parseInt(password) : 0,
+            machineStatus: lavozimi,
+            date: new Date().toISOString().split('T')[0],
+            hour: parseInt(lavozimi.split(':')[0]),
+            minute: parseInt(lavozimi.split(':')[1]),
         };
         axios.post(`${reposrtAdd}`, reportData)
             .then(response => {
@@ -122,7 +136,7 @@ const ReportView: React.FC = () => {
             });
 
         console.log('Form submitted:', reportData);
-    };  
+    };
 
     return (
         <div className="p-5">
@@ -206,50 +220,88 @@ const ReportView: React.FC = () => {
 
             {/* Modal */}
             <div className='p-4'>
-                    <Dialog open={isModalDelete} onClose={closeModal} maxWidth="sm" fullWidth>
+                <Dialog open={isModalDelete} onClose={closeModal} maxWidth="sm" fullWidth>
                     <DialogTitle>Hisobot qo'shish</DialogTitle>
                     <DialogContent>
                         <Inputs
                             label="Paxta maydoni"
                             value={firstname}
                             onChange={handleInputChange(setFirstName)}
-                            type="number" 
+                            type="number"
                         />
+                        <div className='p-4'></div>
                         <Inputs
                             label="Paxta hajmi"
                             value={lastName}
                             onChange={handleInputChange(setLastName)}
                             type="number"
                         />
-                        <Inputs
+                        <div className='p-4'></div>
+                        <FormControl fullWidth disabled={!farmId}>
+                            <InputLabel id="machine-status-label">Mashina holati</InputLabel>
+                            <Select
+                                labelId="machine-status-label"
+                                id="machine-status-select"
+                                value={lavozimi}
+                                onChange={(e) => setLavozimi(e.target.value)}
+                            >
+                                {machineStatusOptions.map((option, index) => (
+                                    <MenuItem key={index} value={option}>
+                                        {option}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <div className='p-4'></div>
+                        <FormControl fullWidth disabled={!farmId}>
+                            <InputLabel id="machine-status-label">Mashina holati</InputLabel>
+                            <Select
+                                labelId="machine-status-label"
+                                id="machine-status-select"
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                            >
+                                {reportsTime.map((time:any, index:number) => (
+                                    <MenuItem key={index} value={time}>
+                                        {time}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                        {/* <Inputs
                             label="PTM ishlashi"
                             value={phoneNumber}
                             onChange={handleInputChange(setPhoneNumber)}
                             type="text" 
-                        />
+                        /> */}
+                        <div className='p-4'></div>
                         <Inputs
                             label="PTM ni ishsiz holati"
                             value={password}
                             onChange={handleInputChange(setPassword)}
-                            type="number" 
+                            type="number"
                         />
-                        <Inputs
+                        <div className='p-4'></div>
+                        {/* <Inputs
                             label="PTM holati"
                             value={lavozimi}
                             onChange={handleInputChange(setLavozimi)}
-                            type="text" 
-                        />
+                            type="text"
+                        /> */}
+                        <div className='p-4'></div>
                         <Inputs
                             label="Sana"
                             value={lavozimi}
                             onChange={handleInputChange(setLavozimi)}
-                            type="date" 
+                            type="date"
                         />
+                        <div className='p-4'></div>
                         <Inputs
                             label="Vaqt"
                             value={lavozimi}
                             onChange={handleInputChange(setLavozimi)}
-                            type="time" 
+                            type="time"
                         />
                     </DialogContent>
 
