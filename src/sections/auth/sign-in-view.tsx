@@ -62,7 +62,7 @@ export function SignInView() {
         fullWidth
         name="phoneNmber"
         label="Phone number"
-        type="number"
+        type="text"
         value={data.phoneNmber}
         onChange={handleInputChange}
         InputLabelProps={{ shrink: true }}
@@ -97,7 +97,7 @@ export function SignInView() {
         variant="contained"
         disabled={!isFormValid || isSubmitting} // Button is disabled if form is invalid or submitting
       >
-       {isSubmitting ? 'Yukllanmoqda...' : 'Kirish'} 
+        {isSubmitting ? 'Yukllanmoqda...' : 'Kirish'}
       </LoadingButton>
     </Box>
   );
