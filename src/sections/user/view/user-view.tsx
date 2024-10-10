@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -8,28 +7,40 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-
 import { _users } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
-
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
-
 import { TableNoData } from '../table-no-data';
 import { UserTableRow } from '../user-table-row';
 import { UserTableHead } from '../user-table-head';
 import { TableEmptyRows } from '../table-empty-rows';
 import { UserTableToolbar } from '../user-table-toolbar';
+import { Inputs } from '../../../components/input/input';
+import { Modals } from '../../../components/modal/modal'; // Update the import path if necessary
 import { emptyRows, applyFilter, getComparator } from '../utils';
-
 import type { UserProps } from '../user-table-row';
 
 // ----------------------------------------------------------------------
 
 export function UserView() {
   const table = useTable();
-
   const [filterName, setFilterName] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+
+  const [inputValue, setInputValue] = useState('');
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true); 
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const dataFiltered: UserProps[] = applyFilter({
     inputData: _users,
@@ -49,6 +60,7 @@ export function UserView() {
           variant="contained"
           color="inherit"
           startIcon={<Iconify icon="mingcute:add-line" />}
+          onClick={openModal}
         >
           New user
         </Button>
@@ -120,10 +132,58 @@ export function UserView() {
           count={_users.length}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25]}
           onRowsPerPageChange={table.onChangeRowsPerPage}
         />
       </Card>
+
+      <Modals title="Foydalanuvchi qo'shish" open={isModalOpen} onClose={closeModal}>
+        
+        <Inputs
+          label=" Ism kiriting"
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+        <Inputs
+          label=" Familiya kiriting"
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+        <Inputs
+          label=" Telefon no'mer kiriting"
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+        <Inputs
+          label="Parol kiriting"
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+        <Inputs
+          label="Lavozim kiriting"
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+        <Box mt={2}>
+          <Button
+            variant="contained"
+            color="error" 
+            onClick={() => {
+              
+            }}
+          >
+            Bekor qilish
+          </Button>
+          <Button
+            variant="contained"
+            color="inherit"
+            onClick={closeModal}
+            sx={{ ml: 2 }} 
+          >
+            Foydalanuvchi qo'shish
+          </Button>
+        </Box>
+      </Modals>
     </DashboardContent>
   );
 }
