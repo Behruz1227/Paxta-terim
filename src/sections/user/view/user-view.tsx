@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -20,35 +20,60 @@ import { Inputs } from '../../../components/input/input';
 import { Modals } from '../../../components/modal/modal'; // Update the import path if necessary
 import { emptyRows, applyFilter, getComparator } from '../utils';
 import type { UserProps } from '../user-table-row';
+import { getAllUser } from '../../../hooks/logic/user/user';
+import { useUserAll } from '../../../hooks/logic/state-managment/user';
+
 
 // ----------------------------------------------------------------------
 
 export function UserView() {
+  const { userData, setUserData } = useUserAll();
   const table = useTable();
   const [filterName, setFilterName] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false); 
-
-  const [inputValue, setInputValue] = useState('');
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true); 
-  };
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [position, setPosition] = useState('');
+  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => setter(event.target.value);
+  const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
+    setName('');
+    setLastName('');
+    setPhone('');
+    setPassword('');
+    setPosition('');
+  };
+  const handleFormSubmit = () => {
+    const newUser = {
+      name,
+      lastName,
+      phone,
+      password,
+      position,
+    };
+    console.log('New User:', newUser);
+    closeModal();
   };
 
-  const dataFiltered: UserProps[] = applyFilter({
-    inputData: _users,
-    comparator: getComparator(table.order, table.orderBy),
-    filterName,
-  });
+  // const dataFiltered: UserProps[] = applyFilter({
+  //   inputData: _users,
+  //   comparator: getComparator(table.order, table.orderBy),
+  //   filterName,
+  // });
 
-  const notFound = !dataFiltered.length && !!filterName;
+  // const notFound = !dataFiltered.length && !!filterName;
+
+  useEffect(() => {
+    getAllUser(setUserData)
+    console.log(userData);
+  }, [setUserData]);
+
+  console.log(userData);
+  
 
   return (
     <DashboardContent>
@@ -92,41 +117,38 @@ export function UserView() {
                   )
                 }
                 headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
+                  { id: 'name', label: 'Ism' },
+                  { id: 'company', label: 'Familiya' },
+                  { id: 'role', label: 'Telefon raqam' },
+                  { id: 'isVerified', label: 'Lavozimi', align: 'center' },
+                  { id: 'status', label: 'Active' },
                   { id: '' },
                 ]}
               />
               <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row) => (
-                    <UserTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
-                    />
-                  ))}
-
-                <TableEmptyRows
-                  height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
-                />
-
-                {notFound && <TableNoData searchQuery={filterName} />}
+                {userData.length === 0 ? (
+                  <TableNoData searchQuery={filterName} /> 
+                ) : (
+                  userData
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    )
+                    .map((item: any, idx: number) => (
+                      <UserTableRow
+                        key={item.id}
+                        row={item}
+                        selected={table.selected.includes(item.id)}
+                        onSelectRow={() => table.onSelectRow(item.id)}
+                      />
+                    ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>
         </Scrollbar>
 
-        <TablePagination
+        {/* <TablePagination
           component="div"
           page={table.page}
           count={_users.length}
@@ -134,53 +156,50 @@ export function UserView() {
           onPageChange={table.onChangePage}
           rowsPerPageOptions={[10, 25]}
           onRowsPerPageChange={table.onChangeRowsPerPage}
-        />
+        /> */}
       </Card>
 
       <Modals title="Foydalanuvchi qo'shish" open={isModalOpen} onClose={closeModal}>
-        
         <Inputs
           label=" Ism kiriting"
-          value={inputValue}
-          onChange={handleInputChange}
+          value={name}
+          onChange={handleInputChange(setName)}
         />
         <Inputs
           label=" Familiya kiriting"
-          value={inputValue}
-          onChange={handleInputChange}
+          value={lastName}
+          onChange={handleInputChange(setLastName)}
         />
         <Inputs
           label=" Telefon no'mer kiriting"
-          value={inputValue}
-          onChange={handleInputChange}
+          value={phone}
+          onChange={handleInputChange(setPhone)}
         />
         <Inputs
           label="Parol kiriting"
-          value={inputValue}
-          onChange={handleInputChange}
+          value={password}
+          onChange={handleInputChange(setPassword)}
         />
         <Inputs
           label="Lavozim kiriting"
-          value={inputValue}
-          onChange={handleInputChange}
+          value={position}
+          onChange={handleInputChange(setPosition)}
         />
         <Box mt={2}>
           <Button
             variant="contained"
-            color="error" 
-            onClick={() => {
-              
-            }}
+            color="error"
+            onClick={closeModal}
           >
             Bekor qilish
           </Button>
           <Button
             variant="contained"
-            color="inherit"
-            onClick={closeModal}
-            sx={{ ml: 2 }} 
+            color="success"
+            onClick={handleFormSubmit}
+            sx={{ ml: 2 }}
           >
-            Foydalanuvchi qo'shish
+            Foydalanuvchi qoshish
           </Button>
         </Box>
       </Modals>
