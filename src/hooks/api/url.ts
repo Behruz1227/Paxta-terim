@@ -18,7 +18,9 @@ export const districtAdd = `${base_url}district/create`
 export const getDistirct = `${base_url}district/list`
 
 //Tumanlarni delete qilish
-export const deleteDistirctes = `${base_url}district`
+export const editDistrict = `${base_url}district`
+export const deleteDist = `${base_url}district`
+
 
 // Machine 
 export const getMachine:string = `${base_url}machines/list`
