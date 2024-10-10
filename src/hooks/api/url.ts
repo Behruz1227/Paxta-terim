@@ -9,3 +9,9 @@ export const postUsers: string = `${base_url}user/create`
 
 // delete user 
 export const deleteUser:string = `${base_url}user`
+
+// Machine 
+export const getMachine:string = `${base_url}machines/list`
+export const postMachine:string = `${base_url}machines/create`
+export const delMachine:string = `${base_url}user`
+export const putMachine:string = `${base_url}user`
