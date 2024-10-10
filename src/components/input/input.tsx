@@ -8,19 +8,22 @@ interface MyInputProps {
   error?: any;
   helperText?: any;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  type?: string;
 }
 export const Inputs: React.FC<MyInputProps> = ({
   label,
   value,
   error,
   onChange,
-  helperText
+  helperText,
+  type = 'text'
 }) => (
   <div>
     <TextField
       className="border-slate-900"
       label={label}
       value={value}
+      type={type} 
       onChange={onChange}
       variant="outlined"
       fullWidth

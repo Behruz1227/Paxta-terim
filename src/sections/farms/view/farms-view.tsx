@@ -7,15 +7,20 @@ import { Modals } from 'src/components/modal/modal';
 import { farms_get, farms_global } from 'src/hooks/api/url';
 import useDelete from 'src/hooks/delete';
 import useGet from 'src/hooks/get';
+import usePut from 'src/hooks/put';
 
 const FarmsView: React.FC = () => {
     const { get: getFarms, data: farmsData, isLoading: farmsLoading } = useGet();
     const { remove: deleteFarms, data: delFarmsData, isLoading: delFarmsLoading } = useDelete()
+    const { data: editFarmsData, isLoading: editFarmsLoading, put: editFarm } = usePut()
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [isOpenDelModal, setIsOpenDelModal] = useState(false);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     const [farmId, setFarmId] = useState('')
+    const [farmName, setFarmName] = useState('')
+    const [farmInn, setFarmInn] = useState('')
+    const [cottonPickedId, setCottonPickedId] = useState('')
     // const
 
     useEffect(() => {
@@ -33,18 +38,35 @@ const FarmsView: React.FC = () => {
         deleteFarms(farms_global, farmId);
     }
 
+    const handleFarmEdit = () => {
+        editFarm(farms_global, farmId, {
+            farmName,
+            inn: farmInn,
+            cottonPickedId
+        });
+    }
+
     const toggleDelModal = () => setIsOpenDelModal(!isOpenDelModal);
     const toggleEditModal = () => setIsOpenEditModal(!isOpenEditModal);
 
     useEffect(() => {
-        if (delFarmsData) {
+        if (delFarmsData || editFarmsData) {
             getFarms(`${farms_get}?page=${currentPage - 1}&size=${pageSize}`);
-            toggleDelModal();
+            delFarmsData ? toggleDelModal() : toggleEditModal()
             setFarmId('')
+            setCottonPickedId('')
             setCurrentPage(1)
             setPageSize(10)
         }
-    }, [delFarmsData])
+    }, [delFarmsData, editFarmsData])
+
+    useEffect(() => {
+        if (!isOpenEditModal || !isOpenEditModal) {
+            setFarmInn('')
+            setCottonPickedId('')
+            setFarmName('')
+        }
+    }, [isOpenEditModal, isOpenEditModal])
 
     return (
         <div className='p-5'>
@@ -115,6 +137,9 @@ const FarmsView: React.FC = () => {
                                         onClick={() => {
                                             toggleEditModal()
                                             setFarmId(item.farmId)
+                                            setFarmName(item.farmName)
+                                            setFarmInn(item.inn)
+                                            setCottonPickedId(item.cottonPickedId)
                                         }}
                                     >
                                         <Iconify icon="solar:pen-bold" />
@@ -153,7 +178,7 @@ const FarmsView: React.FC = () => {
                         Bekor qilish
                     </Button>
                     <Button variant="contained" disabled={farmsLoading} onClick={handleFarmDelete} color="success" sx={{ ml: 2 }}>
-                        {farmsLoading ? 'Yuklanmoqda...' : 'O\'chirish'}
+                        {delFarmsLoading ? 'Yuklanmoqda...' : 'O\'chirish'}
                     </Button>
                 </Box>
             </Modals>
@@ -162,16 +187,20 @@ const FarmsView: React.FC = () => {
                     <div>
                         <Inputs
                             label="Ferma nomini kiriting"
+                            value={farmName}
+                            onChange={(e) => setFarmName(e.target.value)}
                         />
                         <Inputs
                             label="Ferma innsini kiriting"
+                            value={farmInn}
+                            onChange={(e) => setFarmInn(e.target.value)}
                         />
                     </div>
                     <Button variant="contained" color="error" onClick={toggleEditModal}>
                         Bekor qilish
                     </Button>
-                    <Button variant="contained" disabled={farmsLoading} color="success" sx={{ ml: 2 }}>
-                        {farmsLoading ? 'Yuklanmoqda...' : 'Saqlash'}
+                    <Button variant="contained" onClick={handleFarmEdit} disabled={farmsLoading} color="success" sx={{ ml: 2 }}>
+                        {editFarmsLoading ? 'Yuklanmoqda...' : 'Saqlash'}
                     </Button>
                 </Box>
             </Modals>

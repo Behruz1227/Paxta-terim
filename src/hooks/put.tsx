@@ -11,7 +11,7 @@ const usePut = () => {
     setError(null);
     setData(null);
     try {
-      const api = id ? `${url}/${id}` : url;
+      const api = id ? `${url}${id}` : url;
       const { data } = await axios.put(api, updateData);
       if (data.success) {
         setData(data);

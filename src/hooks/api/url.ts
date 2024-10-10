@@ -33,3 +33,12 @@ export const putMachine:string = `${base_url}user`
 // farms
 export const farms_get:string = `${base_url}farm/list`
 export const farms_global:string = `${base_url}farm/`
+
+// master uchun hisobot get yo'li 
+export const report_get: string = `${base_url}report/master`
+export const report_time: string = `${base_url}report/times`
+
+// cottom piket
+export const cottom_get:string = `${base_url}cottonPicked/list`
+export const farmList:string = `${base_url}farm/list`
+export const reposrtAdd:string = `${base_url}report/create`
