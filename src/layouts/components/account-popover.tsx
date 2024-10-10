@@ -26,6 +26,7 @@ import {
 } from "@mui/material";
 import { Inputs } from "src/components/input/input";
 import usePut from "src/hooks/put";
+import toast from "react-hot-toast";
 
 // ----------------------------------------------------------------------
 
@@ -83,11 +84,15 @@ export function AccountPopover({
 
   useEffect(() =>  {
     if (updateData) {
-      sessionStorage.setItem("token", updateData.body)
+      console.log(updateData);
       
+      sessionStorage.setItem("token", updateData?.body)
+      closeModal()
+      toast.success("Profil tahrirlandi!")
       getUserMe(userGetMe);
     } else if (updateError) {
-
+      closeModal()
+      toast.error("Profil tahrirlanmadi")
     }
   }, [updateData, updateError]);
 
@@ -241,7 +246,7 @@ export function AccountPopover({
           </MenuItem>
           <MenuItem className="flex w-full justify-between">
             <p>Lavozim : </p>
-            <p>{datas?.lavozim ? datas?.lavozim : "-"}</p>
+            <p>{datas?.lavozimi ? datas?.lavozimi : "-"}</p>
           </MenuItem>
         </MenuList>
 
@@ -269,7 +274,7 @@ export function AccountPopover({
         onClose={closeModal}
         maxWidth="xl"
       >
-        <DialogTitle>Mashina qo'shish</DialogTitle>
+        <DialogTitle>Profilni tahrirlas</DialogTitle>
         <DialogContent className="md:min-w-[700px]">
           <Box className="grid md:grid-cols-2 gap-x-10">
             <Inputs
@@ -323,7 +328,7 @@ export function AccountPopover({
               onClick={handleFormSubmit}
               sx={{ ml: 2 }}
             >
-              Foydalanuvchi qo'shish
+              {updateLoading ? "Yuklanmoqda..." : "Tahrirlash"}
             </Button>
           </Box>
         </DialogActions>
