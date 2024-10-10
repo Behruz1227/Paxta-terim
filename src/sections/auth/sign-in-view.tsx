@@ -19,6 +19,7 @@ export function SignInView() {
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // For disabling button during submission
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -27,7 +28,12 @@ export function SignInView() {
       [name]: value,
     });
   };
-  const handleSignIn = async () => {
+
+  const isFormValid = data.phoneNmber.length > 0 && data.password.length >= 3;
+
+  const handleSignIn = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
     try {
       const res = await axios.post(log_in, {
         phoneNumber: data.phoneNmber,
@@ -41,18 +47,20 @@ export function SignInView() {
       }
     } catch (error) {
       alert(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const renderForm = (
-    <Box display="flex" flexDirection="column" alignItems="flex-end">
+    <Box display="flex" flexDirection="column" alignItems="flex-end" component="form" onSubmit={handleSignIn}>
       <TextField
         fullWidth
         name="phoneNmber"
         label="Phone number"
         type="number"
         value={data.phoneNmber}
-        onChange={handleInputChange} // Update on change
+        onChange={handleInputChange}
         InputLabelProps={{ shrink: true }}
         sx={{ mb: 3 }}
       />
@@ -62,7 +70,7 @@ export function SignInView() {
         name="password"
         label="Password"
         value={data.password}
-        onChange={handleInputChange} // Update on change
+        onChange={handleInputChange}
         InputLabelProps={{ shrink: true }}
         type={showPassword ? 'text' : 'password'}
         InputProps={{
@@ -83,7 +91,7 @@ export function SignInView() {
         type="submit"
         color="inherit"
         variant="contained"
-        onClick={handleSignIn}
+        disabled={!isFormValid || isSubmitting} // Button is disabled if form is invalid or submitting
       >
         Sign in
       </LoadingButton>
