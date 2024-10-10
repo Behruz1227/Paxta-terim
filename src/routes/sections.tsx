@@ -43,7 +43,7 @@ export function Router() {
         </DashboardLayout>
       ),
       children: [
-        { path: 'dashboard',element: <HomePage />, index: true },
+        { path: 'dashboard', element: <HomePage /> },
         { path: 'user', element: <UserPage /> },
         { path: 'districts', element: <ProductsPage /> },
         { path: 'machines', element: <BlogPage /> },
@@ -56,6 +56,7 @@ export function Router() {
           <SignInPage />
         </AuthLayout>
       ),
+      index: true
     },
     {
       path: '404',
