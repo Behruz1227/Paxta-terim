@@ -27,6 +27,7 @@ import useGet from 'src/hooks/get';
 import usePost from 'src/hooks/post';
 import EditUserModal from '../editModal';
 import useDelete from 'src/hooks/delete';
+import { Pagination } from 'antd';
 
 export function UserView() {
   const { userData, setUserData } = useUserAll();
@@ -64,6 +65,10 @@ export function UserView() {
     setPassword('');
     setLavozimi('');
   };
+  const handlePaginationChange = (page: number, size: number) => {
+    setCurrentPage(page);
+    setPageSize(size);
+};
 
   const handleFormSubmit = () => {
     postUser(`${postUsers}`, {
@@ -152,17 +157,17 @@ export function UserView() {
                 )}
               </TableBody>
             </Table>
+            {data && (
+                <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={data.totalElements}
+                    onChange={handlePaginationChange}
+                    showSizeChanger={false}
+                />
+            )}
           </TableContainer>
         </Scrollbar>
-
-        {/* <TablePagination
-          component="div"
-          count={userData.length}
-          page={table.page}
-          onPageChange={table.onChangePage}
-          rowsPerPage={table.rowsPerPage}
-          onRowsPerPageChange={table.onChangeRowsPerPage}
-        /> */}
       </Card>
 
       <Modals title="Foydalanuvchi qo'shish" open={isModalOpen} onClose={closeModal}>
