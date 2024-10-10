@@ -27,6 +27,11 @@ export const navAdminData = [
     path: '/machines',
     icon: icon('ic-blog'),
   },
+  {
+    title: 'Fermalar',
+    path: '/farms',
+    icon: icon('ic-blog'),
+  },
 ];
 
 export const navUserData = [

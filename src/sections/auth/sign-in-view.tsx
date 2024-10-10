@@ -97,7 +97,7 @@ export function SignInView() {
         variant="contained"
         disabled={!isFormValid || isSubmitting} // Button is disabled if form is invalid or submitting
       >
-       {isSubmitting ? 'Yukllanmoqda...' : 'Kirish'} 
+       {isSubmitting ? 'Yuklanmoqda...' : 'Kirish'} 
       </LoadingButton>
     </Box>
   );

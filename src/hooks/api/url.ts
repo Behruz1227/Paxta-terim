@@ -26,3 +26,6 @@ export const postMachine:string = `${base_url}machines/create`
 export const delMachine:string = `${base_url}user`
 export const putMachine:string = `${base_url}user`
 
+// farms
+export const farms_get:string = `${base_url}farm/list`
+export const farms_global:string = `${base_url}farm/`
