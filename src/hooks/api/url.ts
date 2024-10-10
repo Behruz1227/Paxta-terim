@@ -18,7 +18,9 @@ export const districtAdd = `${base_url}district/create`
 export const getDistirct = `${base_url}district/list`
 
 //Tumanlarni delete qilish
-export const deleteDistirctes = `${base_url}district`
+export const editDistrict = `${base_url}district`
+export const deleteDist = `${base_url}district`
+
 
 // Machine 
 export const getMachine:string = `${base_url}machines/list`
@@ -26,3 +28,6 @@ export const postMachine:string = `${base_url}machines/create`
 export const delMachine:string = `${base_url}user`
 export const putMachine:string = `${base_url}user`
 
+// farms
+export const farms_get:string = `${base_url}farm/list`
+export const farms_global:string = `${base_url}farm/`
