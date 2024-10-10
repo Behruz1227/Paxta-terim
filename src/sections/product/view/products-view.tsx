@@ -77,10 +77,6 @@ export function ProductsView() {
     setIsModalDelete(true); 
   };
 
-
-  console.log(firstname);
-  
-
   return (
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
