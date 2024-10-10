@@ -52,7 +52,7 @@ export function UserTableRow({ row, selected, onSelectRow, onEdit, onDelete }: U
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
         <TableCell component="th" scope="row">
-          {row.id}
+          
         </TableCell>
         <TableCell component="th" scope="row">
           {row.firstName}
