@@ -11,63 +11,49 @@ import axios from 'axios';
 import { Iconify } from 'src/components/iconify';
 import { useRouter } from 'src/routes/hooks';
 import { log_in } from 'src/hooks/api/url';
-import usePost from 'src/hooks/post';
 
 export function SignInView() {
   const router = useRouter();
-  const [dataLog, setDataLog] = useState({
-    phoneNumber: '998',
+  const [data, setData] = useState({
+    phoneNmber: '998',
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    if (name === 'phoneNumber') {
-      const sanitizedValue = value.replace(/\D/g, '');
-      setDataLog({
-        ...dataLog,
-        [name]: sanitizedValue,
-      });
-    } else {
-      setDataLog({
-        ...dataLog,
-        [name]: value,
-      });
-    }
+    setData({
+      ...data,
+      [name]: value,
+    });
   };
-
-  const { data, post, error, isLoading } = usePost();
-  console.log(data);
-
   const handleSignIn = async () => {
     try {
-      post(log_in, {
-        phoneNumber: dataLog.phoneNumber,
-        password: dataLog.password,
+      const res = await axios.post(log_in, {
+        phoneNumber: data.phoneNmber,
+        password: data.password,
       });
-      if (data.data.success) {
-        sessionStorage.setItem('token', data.data.message);
-        if (data.data.body === 'ROLE_ADMIN') {
+      if (res.data.success) {
+        sessionStorage.setItem('token', res.data.message);
+        if (res.data.body === 'ROLE_ADMIN') {
           router.push('/');
         }
       }
-    } catch {
+    } catch (error) {
       alert(error);
     }
   };
 
-  // Render the form
   const renderForm = (
     <Box display="flex" flexDirection="column" alignItems="flex-end">
       <TextField
         fullWidth
-        name="phoneNumber"
+        name="phoneNmber"
         label="Phone number"
         type="number"
-        value={dataLog.phoneNumber}
-        onChange={handleInputChange}
+        value={data.phoneNmber}
+        onChange={handleInputChange} // Update on change
         InputLabelProps={{ shrink: true }}
-        inputProps={{ maxLength: 12 }} // Limit input to 12 characters including country code
         sx={{ mb: 3 }}
       />
 
@@ -75,8 +61,8 @@ export function SignInView() {
         fullWidth
         name="password"
         label="Password"
-        value={dataLog.password}
-        onChange={handleInputChange}
+        value={data.password}
+        onChange={handleInputChange} // Update on change
         InputLabelProps={{ shrink: true }}
         type={showPassword ? 'text' : 'password'}
         InputProps={{
@@ -98,14 +84,12 @@ export function SignInView() {
         color="inherit"
         variant="contained"
         onClick={handleSignIn}
-        loading={isLoading} // Show loading state while waiting for the request
       >
         Sign in
       </LoadingButton>
     </Box>
   );
 
-  // Main return function
   return (
     <>
       <Box gap={1.5} display="flex" flexDirection="column" alignItems="center" sx={{ mb: 5 }}>
