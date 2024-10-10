@@ -40,7 +40,15 @@ export function UserTableRow({ row, selected, onSelectRow, onEdit, onDelete }: U
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
   const {setId} = useDeletes()
 
+  const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    setOpenPopover(event.currentTarget);
+  }, []);
 
+  const handleClosePopover = useCallback(() => {
+    setOpenPopover(null);
+  }, []);
+
+  
 
   const handleDelete = () => {
     setId(row.id)
@@ -52,7 +60,6 @@ export function UserTableRow({ row, selected, onSelectRow, onEdit, onDelete }: U
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
         <TableCell component="th" scope="row">
-          
         </TableCell>
         <TableCell component="th" scope="row">
           {row.firstName}

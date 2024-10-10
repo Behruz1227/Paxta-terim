@@ -83,10 +83,7 @@ export function UserView() {
 
   const del = () => {
     remove(`${deleteUser}/`, `${id}`)
-
     console.log("data", userDelete);
-
-
   }
 
   useEffect(() => {
@@ -158,14 +155,14 @@ export function UserView() {
           </TableContainer>
         </Scrollbar>
 
-        <TablePagination
+        {/* <TablePagination
           component="div"
           count={userData.length}
           page={table.page}
           onPageChange={table.onChangePage}
           rowsPerPage={table.rowsPerPage}
           onRowsPerPageChange={table.onChangeRowsPerPage}
-        />
+        /> */}
       </Card>
 
       <Modals title="Foydalanuvchi qo'shish" open={isModalOpen} onClose={closeModal}>

@@ -9,3 +9,12 @@ export const postUsers: string = `${base_url}user/create`
 
 // delete user 
 export const deleteUser:string = `${base_url}user`
+
+// Tuman qo'shish admin uchun 
+export const districtAdd = `${base_url}district/create`
+
+// Tumanlarni ko'radi admin 
+export const getDistirct = `${base_url}district/list`
+
+//Tumanlarni delete qilish
+export const deleteDistirctes = `${base_url}district`
