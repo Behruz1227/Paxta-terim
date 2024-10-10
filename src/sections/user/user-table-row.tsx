@@ -12,6 +12,8 @@ import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
+import useDelete from 'src/hooks/delete';
+import { useDeletes } from 'src/hooks/logic/state-managment/user';
 
 // ----------------------------------------------------------------------
 
@@ -36,26 +38,21 @@ type UserTableRowProps = {
 
 export function UserTableRow({ row, selected, onSelectRow, onEdit, onDelete }: UserTableRowProps) {
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
+  const {setId} = useDeletes()
 
-  const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
-    setOpenPopover(event.currentTarget);
-  }, []);
 
-  const handleClosePopover = useCallback(() => {
-    setOpenPopover(null);
-  }, []);
 
   const handleDelete = () => {
-    console.log(`Deleting user with ID: ${row.id}`); // Log the user ID
+    setId(row.id)
     onDelete(row.id);
-    handleClosePopover();
+  
   };
 
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
         <TableCell component="th" scope="row">
-          {row.id - 1}
+          {row.id}
         </TableCell>
         <TableCell component="th" scope="row">
           {row.firstName}
