@@ -1,11 +1,13 @@
-import { Table, TableContainer, Typography } from '@mui/material';
+import { Table, TableBody, TableContainer, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Scrollbar } from 'src/components/scrollbar';
 
 import { CONFIG } from 'src/config-global';
 import useGet from 'src/hooks/get';
+import { TableNoData } from 'src/sections/user/table-no-data';
 import { UserTableHead } from 'src/sections/user/user-table-head';
+import { UserTableRow } from 'src/sections/user/user-table-row';
 
 export default function Page() {
   const {data, get, error, isLoading } = useGet()
@@ -55,8 +57,8 @@ export default function Page() {
                         row={item}
                         selected={table.selected.includes(item.id)}
                         onSelectRow={() => table.onSelectRow(item.id)}
-                        onDelete={() => deleteModal()}
-                        onEdit={() => editModal()}
+                        // onDelete={() => deleteModal()}
+                        // onEdit={() => editModal()}
                       />
                     ))
                 )}
