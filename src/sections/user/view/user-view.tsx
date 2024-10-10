@@ -21,8 +21,8 @@ import { Modals } from '../../../components/modal/modal'; // Update the import p
 import { emptyRows, applyFilter, getComparator } from '../utils';
 import type { UserProps } from '../user-table-row';
 import { getAllUser } from '../../../hooks/logic/user/user';
-import { useUserAll } from '../../../hooks/logic/state-managment/user';
-import { allUserGet, postUsers } from 'src/hooks/api/url';
+import { useDeletes, useUserAll } from '../../../hooks/logic/state-managment/user';
+import { allUserGet, deleteUser, postUsers } from 'src/hooks/api/url';
 import useGet from 'src/hooks/get';
 import usePost from 'src/hooks/post';
 import EditUserModal from '../editModal';
@@ -38,12 +38,14 @@ export function UserView() {
   const [firstname, setFirsName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [lavozimi,setLavozimi] = useState('')
-  const [password,setPassword] = useState('')
+  const [lavozimi, setLavozimi] = useState('')
+  const [password, setPassword] = useState('')
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const {data, error, get: getUser, isLoading} = useGet()
-  const {data:usersPost ,  post: postUser} = usePost()
+  const { data, error, get: getUser, isLoading } = useGet()
+  const { id } = useDeletes()
+  const { data: usersPost, post: postUser } = usePost()
+  const { remove, data: userDelete } = useDelete()
 
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) =>
     (event: React.ChangeEvent<HTMLInputElement>) => setter(event.target.value);
@@ -51,10 +53,9 @@ export function UserView() {
   const openModal = () => setIsModalOpen(true);
   const editModal = () => setIsEditModal(true);
   const deleteModal = () => setIsDelete(true);
-  const closeDelete = () =>{
+  const closeDelete = () => {
     setIsDelete(false)
   }
-
   const closeModal = () => {
     setIsModalOpen(false);
     setFirsName('');
@@ -65,20 +66,35 @@ export function UserView() {
   };
 
   const handleFormSubmit = () => {
-    postUser(`${postUsers}`,{
+    postUser(`${postUsers}`, {
       firstname,
       lastName,
       phoneNumber,
       password,
       lavozimi,
     })
-    console.log("userrrrr",usersPost);
+    console.log("userrrrr", usersPost);
     closeModal();
   };
 
   useEffect(() => {
     getUser(`${allUserGet}?page=${currentPage}&size=${pageSize}`);
   }, [setUserData, currentPage, pageSize]);
+
+  const del = () => {
+    remove(`${deleteUser}/`, `${id}`)
+
+    console.log("data", userDelete);
+
+
+  }
+
+  useEffect(() => {
+    if (userDelete) {
+      getUser(`${allUserGet}?page=${currentPage}&size=${pageSize}`);
+      setIsDelete(false)
+    }
+  }, [userDelete])
 
   return (
     <DashboardContent>
@@ -97,8 +113,6 @@ export function UserView() {
       </Box>
 
       <Card>
-        
-
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
@@ -129,15 +143,15 @@ export function UserView() {
                 ) : (
                   Array.isArray(data?.object) &&
                   data?.object?.map((item: any) => (
-                      <UserTableRow
-                        key={item.id}
-                        row={item}
-                        selected={table.selected.includes(item.id)}
-                        onSelectRow={() => table.onSelectRow(item.id)}
-                        onDelete={() => deleteModal()}
-                        onEdit={() => editModal()}
-                      />
-                    ))
+                    <UserTableRow
+                      key={item.id}
+                      row={item}
+                      selected={table.selected.includes(item.id)}
+                      onSelectRow={() => table.onSelectRow(item.id)}
+                      onDelete={() => deleteModal()}
+                      onEdit={() => editModal()}
+                    />
+                  ))
                 )}
               </TableBody>
             </Table>
@@ -154,7 +168,7 @@ export function UserView() {
         />
       </Card>
 
-      {/* <Modals title="Foydalanuvchi qo'shish" open={isModalOpen} onClose={closeModal}>
+      <Modals title="Foydalanuvchi qo'shish" open={isModalOpen} onClose={closeModal}>
         <Inputs label="Ism kiriting" value={firstname} onChange={handleInputChange(setFirsName)} />
         <Inputs label="Familiya kiriting" value={lastName} onChange={handleInputChange(setLastName)} />
         <Inputs label="Telefon no'mer kiriting" value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} />
@@ -168,19 +182,41 @@ export function UserView() {
             Foydalanuvchi qo'shish
           </Button>
         </Box>
-      </Modals> */}
+      </Modals>
+
+      {/* Edit modal  start  */}
+
+      <Modals title="Foydalanuvchi o'zgartirish" open={isEditModal} onClose={() => setIsEditModal(false)}>
+        <Inputs label="Ism kiriting" value={firstname} onChange={handleInputChange(setFirsName)} />
+        <Inputs label="Familiya kiriting" value={lastName} onChange={handleInputChange(setLastName)} />
+        <Inputs label="Telefon no'mer kiriting" value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} />
+        <Inputs label="Parol kiriting" value={password} onChange={handleInputChange(setPassword)} />
+        <Inputs label="Lavozim kiriting" value={lavozimi} onChange={handleInputChange(setLavozimi)} />
+        <Box mt={2}>
+          <Button variant="contained" color="error" onClick={() => setIsEditModal(false)}>
+            Bekor qilish
+          </Button>
+          <Button variant="contained" color="success" onClick={handleFormSubmit} sx={{ ml: 1 }}>
+            O'zgartirish
+          </Button>
+        </Box>
+      </Modals>
+
+      {/* Edit modal end */}
+      {/* Delete modal start */}
       <Modals title="Foydalanuvchi o'chirish" open={isDelete} onClose={closeDelete}>
         Siz haqiqatdan ham shu foddalanuvchini tizimdan o'chirmoqchimisiz ?
         <Box mt={2}>
-          <Button variant="contained" color="error" onClick={closeModal}>
+          <Button variant="contained" color="error" onClick={closeDelete}>
             Yo'q
           </Button>
-          <Button variant="contained" color="success" onClick={closeDelete} sx={{ ml: 6 }}>
-            Ha 
+          <Button variant="contained" color="success" onClick={del} sx={{ ml: 1 }}>
+            Ha
           </Button>
         </Box>
       </Modals>
     </DashboardContent>
+    /* Delete modal end */
   );
 }
 export function useTable() {
@@ -204,11 +240,11 @@ export function useTable() {
       setSelected(newSelecteds);
       return;
     }
-    
+
     setSelected([]);
   }, []);
- 
-  
+
+
 
   const onSelectRow = useCallback(
     (inputValue: string) => {
