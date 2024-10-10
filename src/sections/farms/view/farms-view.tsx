@@ -14,7 +14,9 @@ const FarmsView: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [isOpenDelModal, setIsOpenDelModal] = useState(false);
+    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     const [farmId, setFarmId] = useState('')
+    // const
 
     useEffect(() => {
         getFarms(`${farms_get}?page=${currentPage - 1}&size=${pageSize}`);
@@ -32,11 +34,13 @@ const FarmsView: React.FC = () => {
     }
 
     const toggleDelModal = () => setIsOpenDelModal(!isOpenDelModal);
+    const toggleEditModal = () => setIsOpenEditModal(!isOpenEditModal);
 
     useEffect(() => {
         if (delFarmsData) {
             getFarms(`${farms_get}?page=${currentPage - 1}&size=${pageSize}`);
             toggleDelModal();
+            setFarmId('')
             setCurrentPage(1)
             setPageSize(10)
         }
@@ -107,13 +111,19 @@ const FarmsView: React.FC = () => {
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="center">
-                                    <IconButton>
+                                    <IconButton
+                                        onClick={() => {
+                                            toggleEditModal()
+                                            setFarmId(item.farmId)
+                                        }}
+                                    >
                                         <Iconify icon="solar:pen-bold" />
                                     </IconButton>
-                                    <IconButton onClick={() => {
-                                        toggleDelModal()
-                                        setFarmId(item.farmId)
-                                    }}
+                                    <IconButton
+                                        onClick={() => {
+                                            toggleDelModal()
+                                            setFarmId(item.farmId)
+                                        }}
                                         sx={{ color: 'error.main' }}
                                     >
                                         <Iconify icon="solar:trash-bin-trash-bold" />
@@ -128,8 +138,6 @@ const FarmsView: React.FC = () => {
                     )}
                 </TableBody>
             </Table>
-
-            {/* Ant Design Pagination */}
             {farmsData && (
                 <Pagination
                     current={currentPage}
@@ -146,6 +154,24 @@ const FarmsView: React.FC = () => {
                     </Button>
                     <Button variant="contained" disabled={farmsLoading} onClick={handleFarmDelete} color="success" sx={{ ml: 2 }}>
                         {farmsLoading ? 'Yuklanmoqda...' : 'O\'chirish'}
+                    </Button>
+                </Box>
+            </Modals>
+            <Modals title="Fermani o'zgartarish" open={isOpenEditModal} onClose={toggleEditModal}>
+                <Box mt={2}>
+                    <div>
+                        <Inputs
+                            label="Ferma nomini kiriting"
+                        />
+                        <Inputs
+                            label="Ferma innsini kiriting"
+                        />
+                    </div>
+                    <Button variant="contained" color="error" onClick={toggleEditModal}>
+                        Bekor qilish
+                    </Button>
+                    <Button variant="contained" disabled={farmsLoading} color="success" sx={{ ml: 2 }}>
+                        {farmsLoading ? 'Yuklanmoqda...' : 'Saqlash'}
                     </Button>
                 </Box>
             </Modals>

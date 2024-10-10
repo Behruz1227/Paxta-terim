@@ -32,6 +32,11 @@ export const navAdminData = [
     path: '/farms',
     icon: icon('ic-blog'),
   },
+  {
+    title: 'Hisobotlar',
+    path: '/reports',
+    icon: icon('ic-blog'),
+  },
 ];
 
 export const navUserData = [
