@@ -1,49 +1,69 @@
-import { useState, useCallback } from 'react';
-
+import { useState } from 'react';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
-
-import { useRouter } from 'src/routes/hooks';
-
+import Divider from '@mui/material/Divider';
+import Link from '@mui/material/Link';
+import axios from 'axios';
 import { Iconify } from 'src/components/iconify';
-
-// ----------------------------------------------------------------------
+import { useRouter } from 'src/routes/hooks';
+import { log_in } from 'src/hooks/api/url';
 
 export function SignInView() {
   const router = useRouter();
-
+  const [data, setData] = useState({
+    phoneNmber: '998', // Default value
+    password: '',
+  });
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSignIn = useCallback(() => {
-    router.push('/');
-  }, [router]);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+
+  const handleSignIn = async () => {
+    try {
+      const res = await axios.post(log_in, {
+        phoneNumber: data.phoneNmber,
+        password: data.password,
+      });
+      if (res.data.success) {
+        sessionStorage.setItem('token', res.data.message);
+        if (res.data.body === 'ROLE_ADMIN') {
+          router.push('/');
+        }
+      }
+    } catch (error) {
+      alert('Error: ' + error);
+    }
+  };
 
   const renderForm = (
     <Box display="flex" flexDirection="column" alignItems="flex-end">
       <TextField
         fullWidth
-        name="email"
-        label="Email address"
-        defaultValue="hello@gmail.com"
+        name="phoneNmber"
+        label="Phone number"
+        type="number"
+        value={data.phoneNmber}
+        onChange={handleInputChange} // Update on change
         InputLabelProps={{ shrink: true }}
         sx={{ mb: 3 }}
       />
-
-      <Link variant="body2" color="inherit" sx={{ mb: 1.5 }}>
-        Forgot password?
-      </Link>
 
       <TextField
         fullWidth
         name="password"
         label="Password"
-        defaultValue="@demo1234"
+        value={data.password}
+        onChange={handleInputChange} // Update on change
         InputLabelProps={{ shrink: true }}
         type={showPassword ? 'text' : 'password'}
         InputProps={{
