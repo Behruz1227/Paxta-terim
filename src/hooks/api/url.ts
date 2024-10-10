@@ -10,6 +10,7 @@ export const postUsers: string = `${base_url}user/create`
 // delete user 
 export const deleteUser:string = `${base_url}user`
 
+
 // Tuman qo'shish admin uchun 
 export const districtAdd = `${base_url}district/create`
 
@@ -18,3 +19,10 @@ export const getDistirct = `${base_url}district/list`
 
 //Tumanlarni delete qilish
 export const deleteDistirctes = `${base_url}district`
+
+// Machine 
+export const getMachine:string = `${base_url}machines/list`
+export const postMachine:string = `${base_url}machines/create`
+export const delMachine:string = `${base_url}user`
+export const putMachine:string = `${base_url}user`
+
