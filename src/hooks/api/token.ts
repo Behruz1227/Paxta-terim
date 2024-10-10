@@ -1,9 +1,13 @@
-export const config = {
-    headers: {
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-    }
-};
+import axios from 'axios';
+// import { base_url } from './urls';
 
-export const setConfig = () => {
-    config.headers.Authorization = `Bearer ${sessionStorage.getItem('token')}`;
-};
+
+// axios.defaults.baseURL = base_url;
+
+axios.interceptors.request.use((config) => {
+    const token = sessionStorage.getItem('token');
+    config.headers.Authorization = token ? `Bearer ${token}` : '';
+    return config;
+});
+
+export default axios;
