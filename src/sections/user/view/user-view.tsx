@@ -22,58 +22,63 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 import type { UserProps } from '../user-table-row';
 import { getAllUser } from '../../../hooks/logic/user/user';
 import { useUserAll } from '../../../hooks/logic/state-managment/user';
-
-
-// ----------------------------------------------------------------------
+import { allUserGet, postUsers } from 'src/hooks/api/url';
+import useGet from 'src/hooks/get';
+import usePost from 'src/hooks/post';
+import EditUserModal from '../editModal';
+import useDelete from 'src/hooks/delete';
 
 export function UserView() {
   const { userData, setUserData } = useUserAll();
   const table = useTable();
   const [filterName, setFilterName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [name, setName] = useState('');
+  const [isDelete, setIsDelete] = useState(false);
+  const [isEditModal, setIsEditModal] = useState(false);
+  const [firstname, setFirsName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [position, setPosition] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [lavozimi,setLavozimi] = useState('')
+  const [password,setPassword] = useState('')
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const {data, error, get: getUser, isLoading} = useGet()
+  const {data:usersPost ,  post: postUser} = usePost()
+
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) =>
     (event: React.ChangeEvent<HTMLInputElement>) => setter(event.target.value);
+
   const openModal = () => setIsModalOpen(true);
+  const editModal = () => setIsEditModal(true);
+  const deleteModal = () => setIsDelete(true);
+  const closeDelete = () =>{
+    setIsDelete(false)
+  }
+
   const closeModal = () => {
     setIsModalOpen(false);
-    setName('');
+    setFirsName('');
     setLastName('');
-    setPhone('');
+    setPhoneNumber('');
     setPassword('');
-    setPosition('');
+    setLavozimi('');
   };
+
   const handleFormSubmit = () => {
-    const newUser = {
-      name,
+    postUser(`${postUsers}`,{
+      firstname,
       lastName,
-      phone,
+      phoneNumber,
       password,
-      position,
-    };
-    console.log('New User:', newUser);
+      lavozimi,
+    })
+    console.log("userrrrr",usersPost);
     closeModal();
   };
 
-  // const dataFiltered: UserProps[] = applyFilter({
-  //   inputData: _users,
-  //   comparator: getComparator(table.order, table.orderBy),
-  //   filterName,
-  // });
-
-  // const notFound = !dataFiltered.length && !!filterName;
-
   useEffect(() => {
-    getAllUser(setUserData)
-    console.log(userData);
-  }, [setUserData]);
-
-  console.log(userData);
-  
+    getUser(`${allUserGet}?page=${currentPage}&size=${pageSize}`);
+  }, [setUserData, currentPage, pageSize]);
 
   return (
     <DashboardContent>
@@ -92,14 +97,7 @@ export function UserView() {
       </Box>
 
       <Card>
-        <UserTableToolbar
-          numSelected={table.selected.length}
-          filterName={filterName}
-          onFilterName={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setFilterName(event.target.value);
-            table.onResetPage();
-          }}
-        />
+        
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
@@ -107,13 +105,13 @@ export function UserView() {
               <UserTableHead
                 order={table.order}
                 orderBy={table.orderBy}
-                rowCount={_users.length}
+                rowCount={userData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _users.map((user) => user.id)
+                    userData.map((user) => user.id)
                   )
                 }
                 headLabel={[
@@ -126,20 +124,18 @@ export function UserView() {
                 ]}
               />
               <TableBody>
-                {userData.length === 0 ? (
-                  <TableNoData searchQuery={filterName} /> 
+                {data && data.length === 0 ? (
+                  <TableNoData searchQuery={filterName} />
                 ) : (
-                  userData
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((item: any, idx: number) => (
+                  Array.isArray(data?.object) &&
+                  data?.object?.map((item: any) => (
                       <UserTableRow
                         key={item.id}
                         row={item}
                         selected={table.selected.includes(item.id)}
                         onSelectRow={() => table.onSelectRow(item.id)}
+                        onDelete={() => deleteModal()}
+                        onEdit={() => editModal()}
                       />
                     ))
                 )}
@@ -148,67 +144,45 @@ export function UserView() {
           </TableContainer>
         </Scrollbar>
 
-        {/* <TablePagination
+        <TablePagination
           component="div"
+          count={userData.length}
           page={table.page}
-          count={_users.length}
-          rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
-          rowsPerPageOptions={[10, 25]}
+          rowsPerPage={table.rowsPerPage}
           onRowsPerPageChange={table.onChangeRowsPerPage}
-        /> */}
+        />
       </Card>
 
-      <Modals title="Foydalanuvchi qo'shish" open={isModalOpen} onClose={closeModal}>
-        <Inputs
-          label=" Ism kiriting"
-          value={name}
-          onChange={handleInputChange(setName)}
-        />
-        <Inputs
-          label=" Familiya kiriting"
-          value={lastName}
-          onChange={handleInputChange(setLastName)}
-        />
-        <Inputs
-          label=" Telefon no'mer kiriting"
-          value={phone}
-          onChange={handleInputChange(setPhone)}
-        />
-        <Inputs
-          label="Parol kiriting"
-          value={password}
-          onChange={handleInputChange(setPassword)}
-        />
-        <Inputs
-          label="Lavozim kiriting"
-          value={position}
-          onChange={handleInputChange(setPosition)}
-        />
+      {/* <Modals title="Foydalanuvchi qo'shish" open={isModalOpen} onClose={closeModal}>
+        <Inputs label="Ism kiriting" value={firstname} onChange={handleInputChange(setFirsName)} />
+        <Inputs label="Familiya kiriting" value={lastName} onChange={handleInputChange(setLastName)} />
+        <Inputs label="Telefon no'mer kiriting" value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} />
+        <Inputs label="Parol kiriting" value={password} onChange={handleInputChange(setPassword)} />
+        <Inputs label="Lavozim kiriting" value={lavozimi} onChange={handleInputChange(setLavozimi)} />
         <Box mt={2}>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={closeModal}
-          >
+          <Button variant="contained" color="error" onClick={closeModal}>
             Bekor qilish
           </Button>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={handleFormSubmit}
-            sx={{ ml: 2 }}
-          >
-            Foydalanuvchi qoshish
+          <Button variant="contained" color="success" onClick={handleFormSubmit} sx={{ ml: 2 }}>
+            Foydalanuvchi qo'shish
+          </Button>
+        </Box>
+      </Modals> */}
+      <Modals title="Foydalanuvchi o'chirish" open={isDelete} onClose={closeDelete}>
+        Siz haqiqatdan ham shu foddalanuvchini tizimdan o'chirmoqchimisiz ?
+        <Box mt={2}>
+          <Button variant="contained" color="error" onClick={closeModal}>
+            Yo'q
+          </Button>
+          <Button variant="contained" color="success" onClick={closeDelete} sx={{ ml: 6 }}>
+            Ha 
           </Button>
         </Box>
       </Modals>
     </DashboardContent>
   );
 }
-
-// ----------------------------------------------------------------------
-
 export function useTable() {
   const [page, setPage] = useState(0);
   const [orderBy, setOrderBy] = useState('name');
@@ -230,8 +204,11 @@ export function useTable() {
       setSelected(newSelecteds);
       return;
     }
+    
     setSelected([]);
   }, []);
+ 
+  
 
   const onSelectRow = useCallback(
     (inputValue: string) => {

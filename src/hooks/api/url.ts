@@ -5,4 +5,7 @@ export const log_in: string = `${base_url}auth/login`
 export const allUserGet: string = `${base_url}user/list`
 
 // post user admin
-export const postUser: string = `${base_url}user/create`
+export const postUsers: string = `${base_url}user/create`
+
+// delete user 
+export const deleteUser:string = `${base_url}user`

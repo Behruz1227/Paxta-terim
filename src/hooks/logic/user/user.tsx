@@ -1,22 +1,12 @@
-
 import axios from "axios";
-import { config } from "src/hooks/api/token";
-import { allUserGet } from "src/hooks/api/url";
+import { config } from "process";
 
-// all user get 
-export const getAllUser = async (setData: any) => {
-  try {
-    const response = await axios.get(`${allUserGet}`, config);
-    if (response.data.body) {
-      setData(response.data.body);
-    } else {
-      console.log("Error from backend:", response.data.error); 
-      setData([]);
-    }
-  } catch (error) {
-    console.error("Error fetching statistics:", error);
-    setData([]);
-  }
-}; 
+// import { config } from "src/hooks/api/token";
+import useGet from "src/hooks/get";
+
+const {data, error, get: getUser, isLoading} = useGet()
+export const getAllUser = async (setData: any, page: number, size: number) => {
+};
+
 
 
