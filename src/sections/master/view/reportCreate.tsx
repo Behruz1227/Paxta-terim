@@ -245,7 +245,7 @@ const ReportView: React.FC = () => {
                                 value={lavozimi}
                                 onChange={(e) => setLavozimi(e.target.value)}
                             >
-                                {machineStatusOptions.map((option, index) => (
+                                {machineStatusOptions?.map((option, index) => (
                                     <MenuItem key={index} value={option}>
                                         {option}
                                     </MenuItem>
@@ -261,7 +261,7 @@ const ReportView: React.FC = () => {
                                 value={phoneNumber}
                                 onChange={(e) => setPhoneNumber(e.target.value)}
                             >
-                                {reportsTime.map((time:any, index:number) => (
+                                {reportsTime?.map((time:any, index:number) => (
                                     <MenuItem key={index} value={time}>
                                         {time}
                                     </MenuItem>
