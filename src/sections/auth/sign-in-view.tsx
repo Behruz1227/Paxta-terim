@@ -43,7 +43,9 @@ export function SignInView() {
         sessionStorage.setItem('token', res.data.message);
         sessionStorage.setItem('ROLE', res.data.body);
         if (res.data.body === 'ROLE_ADMIN') {
-          router.push('/');
+          router.push('/dashboard');
+        } else {
+          router.push('/blog');
         }
       }
     } catch (error) {
