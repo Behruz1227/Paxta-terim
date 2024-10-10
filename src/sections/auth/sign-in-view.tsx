@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -21,8 +21,8 @@ export function SignInView() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false); // For disabling button during submission
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target
     setData({
       ...data,
       [name]: value,
@@ -31,7 +31,7 @@ export function SignInView() {
 
   const isFormValid = data.phoneNmber.length > 0 && data.password.length >= 3;
 
-  const handleSignIn = async (event) => {
+  const handleSignIn = async (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
     try {
@@ -41,6 +41,7 @@ export function SignInView() {
       });
       if (res.data.success) {
         sessionStorage.setItem('token', res.data.message);
+        sessionStorage.setItem('ROLE', res.data.body);
         if (res.data.body === 'ROLE_ADMIN') {
           router.push('/');
         }
@@ -51,6 +52,7 @@ export function SignInView() {
       setIsSubmitting(false);
     }
   };
+
 
   const renderForm = (
     <Box display="flex" flexDirection="column" alignItems="flex-end" component="form" onSubmit={handleSignIn}>
