@@ -29,7 +29,7 @@ export function SignInView() {
     });
   };
 
-  const isFormValid = data.phoneNmber.length > 0 && data.password.length >= 3;
+  const isFormValid = data.phoneNmber.length > 0 && data.password.length >= 2;
 
   const handleSignIn = async (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -44,7 +44,10 @@ export function SignInView() {
         sessionStorage.setItem('ROLE', res.data.body);
         if (res.data.body === 'ROLE_ADMIN') {
           router.push('/dashboard');
-        } else {
+        } else if (res.data.body === 'ROLE_MASTER') {
+          router.push('/hisobotlar');
+        }
+        else {
           router.push('/blog');
         }
       }

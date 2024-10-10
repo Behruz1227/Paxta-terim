@@ -7,6 +7,7 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
+import ReportCreate from 'src/pages/master/reportCreate';
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +19,7 @@ export const ProductsPage = lazy(() => import('src/pages/products'));
 export const FarmsPage = lazy(() => import('src/pages/farms'));
 export const ReportPage = lazy(() => import('src/pages/report'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
+export const Hisobotlar = lazy(() => import('src/pages/master/hisobot'))
 
 // ----------------------------------------------------------------------
 
@@ -51,6 +53,8 @@ export function Router() {
         { path: 'machines', element: <BlogPage /> },
         { path: 'farms', element: <FarmsPage /> },
         { path: 'reports', element: <ReportPage /> },
+        { path: 'hisobotlar', element: <Hisobotlar /> },
+        { path: 'reportCreate', element: <ReportCreate/> },
       ],
     },
     {

@@ -41,23 +41,14 @@ export const navAdminData = [
 
 export const navUserData = [
   {
-    title: 'Boshqaruv',
-    path: '/dashboard',
+    title: 'Hisobotlar',
+    path: '/hisobotlar',
     icon: icon('ic-analytics'),
   },
   {
-    title: 'Foydalanuvchilar',
-    path: '/user',
-    icon: icon('ic-user'),
+    title: "Hisobot qo'shish",
+    path: '/reportCreate',
+    icon: icon('ic-analytics'),
   },
-  {
-    title: 'Tumanlar',
-    path: '/districts',
-    icon: icon('ic-cart'),
-  },
-  {
-    title: 'Mashinalar',
-    path: '/machines',
-    icon: icon('ic-blog'),
-  },
+
 ];
