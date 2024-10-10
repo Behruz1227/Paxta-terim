@@ -12,7 +12,7 @@ import type { ScrollbarProps } from './types';
 export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
   ({ slotProps, children, fillContent, sx, ...other }, ref) => (
     <Box
-      component={SimpleBar}
+      // component={SimpleBar}
       scrollableNodeProps={{ ref }}
       clickOnTrack={false}
       className={scrollbarClasses.root}

@@ -3,6 +3,8 @@ export const log_in: string = `${base_url}auth/login`
 
 // user all  admin
 export const allUserGet: string = `${base_url}user/list`
+export const userGetMe: string = `${base_url}user/getMe`
+export const updateMe: string = `${base_url}user/edit`
 
 // post user admin
 export const postUsers: string = `${base_url}user/create`
