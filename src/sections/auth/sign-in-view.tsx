@@ -52,7 +52,7 @@ export function SignInView() {
         label="Phone number"
         type="number"
         value={data.phoneNmber}
-        onChange={handleInputChange} // Update on change
+        onChange={handleInputChange} 
         InputLabelProps={{ shrink: true }}
         sx={{ mb: 3 }}
       />

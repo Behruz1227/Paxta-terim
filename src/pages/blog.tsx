@@ -1,10 +1,7 @@
+import { Typography } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
-
-import { BlogView } from 'src/sections/blog/view';
-
-// ----------------------------------------------------------------------
 
 export default function Page() {
   return (
@@ -12,8 +9,9 @@ export default function Page() {
       <Helmet>
         <title> {`Blog - ${CONFIG.appName}`}</title>
       </Helmet>
-
-      <BlogView />
+      <Typography variant="h4" sx={{ mb: 5 }}>
+        any more
+      </Typography>
     </>
   );
 }
