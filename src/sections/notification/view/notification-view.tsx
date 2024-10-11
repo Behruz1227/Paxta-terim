@@ -27,14 +27,20 @@ import {
 import usePost from "src/hooks/post";
 import toast from "react-hot-toast";
 import { MenuItem } from "@mui/material";
+import { Pagination } from "antd";
 
 export function NotificationView() {
   const role = sessionStorage.getItem("ROLE");
   const [isModalDelete, setIsModalDelete] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const { data, get: getNotification } = useGet();
-  const { post: deleteNotifi, data: deleteData, error: deleteError } = usePost();
-  const { post: readNotifi, data: readData, error: readError  } = usePost();
+  const {
+    post: deleteNotifi,
+    data: deleteData,
+    error: deleteError,
+  } = usePost();
+  const { post: readNotifi, data: readData, error: readError } = usePost();
   const { post: editStatus, data: editData, error: editError } = usePost();
 
   const closeModal = () => {
@@ -43,15 +49,33 @@ export function NotificationView() {
 
   useEffect(() => {
     getNotification(
-      `${role === "ROLE_ADMIN" ? notificationGetAdmin : notificationGetUser}`
+      `${
+        role === "ROLE_ADMIN"
+          ? `${notificationGetAdmin}?page=${currentPage - 1}&size=${pageSize}`
+          : `${notificationGetUser}?page=${currentPage - 1}&size=${pageSize}`
+      }`
     );
   }, []);
+
+  useEffect(() => {
+    getNotification(
+      `${
+        role === "ROLE_ADMIN"
+          ? `${notificationGetAdmin}?page=${currentPage - 1}&size=${pageSize}`
+          : `${notificationGetUser}?page=${currentPage - 1}&size=${pageSize}`
+      }`
+    );
+  }, [currentPage, pageSize]);
 
   useEffect(() => {
     if (editData) {
       toast.success("Ruxsat berildi");
       getNotification(
-        `${role === "ROLE_ADMIN" ? notificationGetAdmin : notificationGetUser}`
+        `${
+          role === "ROLE_ADMIN"
+            ? `${notificationGetAdmin}?page=${currentPage - 1}&size=${pageSize}`
+            : `${notificationGetUser}?page=${currentPage - 1}&size=${pageSize}`
+        }`
       );
     } else if (editError) {
       toast.error("Ruxsat berilmadi");
@@ -62,7 +86,11 @@ export function NotificationView() {
     if (readData) {
       toast.success("O'qildi deb belgilandi!");
       getNotification(
-        `${role === "ROLE_ADMIN" ? notificationGetAdmin : notificationGetUser}`
+        `${
+          role === "ROLE_ADMIN"
+            ? `${notificationGetAdmin}?page=${currentPage - 1}&size=${pageSize}`
+            : `${notificationGetUser}?page=${currentPage - 1}&size=${pageSize}`
+        }`
       );
     } else if (readError) {
       toast.error("O'qildi deb belgilanmadi");
@@ -73,7 +101,11 @@ export function NotificationView() {
     if (deleteData) {
       toast.success("Xabar o'chirildi!");
       getNotification(
-        `${role === "ROLE_ADMIN" ? notificationGetAdmin : notificationGetUser}`
+        `${
+          role === "ROLE_ADMIN"
+            ? `${notificationGetAdmin}?page=${currentPage - 1}&size=${pageSize}`
+            : `${notificationGetUser}?page=${currentPage - 1}&size=${pageSize}`
+        }`
       );
     } else if (deleteError) {
       toast.error("Xabar o'chirilmadi");
@@ -101,6 +133,10 @@ export function NotificationView() {
     } else {
       toast.error("No notifications to delete.");
     }
+  };
+  const handlePaginationChange = (page: number, size: number) => {
+    setCurrentPage(page);
+    setPageSize(size);
   };
 
   return (
@@ -158,18 +194,21 @@ export function NotificationView() {
                     </Typography>
                   </TableCell>
                   <TableCell align="center" component="th" scope="row">
-
                     <Select
-                    value={item?.status}
-                    onChange={(e) => {
-                      editStatus(
-                        `${notificationConfirmed}?id=${item.id}&status=${e.target.value}`,
-                        {}
-                      );
-                    }}
+                      value={item?.status}
+                      onChange={(e) => {
+                        editStatus(
+                          `${notificationConfirmed}?id=${item.id}&status=${e.target.value}`,
+                          {}
+                        );
+                      }}
                     >
-                      <MenuItem value={"RUXSAT_SURALMOQDA"}>Ruxsat so'ralmoqda</MenuItem>
-                      <MenuItem value={"RUXSAT_BERILDI"}>Ruxsat berildi</MenuItem>
+                      <MenuItem value={"RUXSAT_SURALMOQDA"}>
+                        Ruxsat so'ralmoqda
+                      </MenuItem>
+                      <MenuItem value={"RUXSAT_BERILDI"}>
+                        Ruxsat berildi
+                      </MenuItem>
                     </Select>
                     {/* <Button
                       onClick={() => {
@@ -201,10 +240,7 @@ export function NotificationView() {
                           readNotifi(notificationRead, { list: [item.id] });
                         }}
                       >
-                        <Iconify
-                          color={"green"}
-                          icon="mingcute:check-2-fill"
-                        />
+                        <Iconify color={"green"} icon="mingcute:check-2-fill" />
                       </IconButton>
                     )}
                     <IconButton
@@ -227,6 +263,17 @@ export function NotificationView() {
             )}
           </TableBody>
         </Table>
+        {data && (
+          <div className="mb-4 mt-2">
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={data?.totalElements}
+              onChange={handlePaginationChange}
+              showSizeChanger={false}
+            />
+          </div>
+        )}
 
         {/* Modal for Delete Confirmation */}
         <Modals
