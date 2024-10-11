@@ -37,6 +37,11 @@ export const navAdminData = [
     path: '/reports',
     icon: icon('ic-blog'),
   },
+  // {
+  //   title: 'notifications',
+  //   path: '/notifications',
+  //   icon: '',
+  // },
 ];
 
 export const navUserData = [
