@@ -56,3 +56,5 @@ export const notificationGetAdmin:string = `${base_url}notification/page/admin`
 export const notificationCountUser:string = `${base_url}notification/count/master`
 export const notificationCountAdmin:string = `${base_url}notification/count/admin`
 export const notificationDelete:string = `${base_url}notification/delete`
+
+

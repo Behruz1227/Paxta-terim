@@ -37,11 +37,11 @@ export const navAdminData = [
     path: '/reports',
     icon: icon('ic-blog'),
   },
-  // {
-  //   title: 'notifications',
-  //   path: '/notifications',
-  //   icon: '',
-  // },
+  {
+    title: 'Statistik',
+    path: '/statistic',
+    icon: icon('ic-blog'),
+  },
 ];
 
 export const navUserData = [
