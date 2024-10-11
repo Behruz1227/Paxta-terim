@@ -23,6 +23,7 @@ export const ReportPage = lazy(() => import('src/pages/report'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 export const Hisobotlar = lazy(() => import('src/pages/master/hisobot'))
 export const Statistic = lazy(() => import('src/pages/statistic'))
+export const ReportHokim = lazy(() => import('src/pages/hokim/hokim'))
 
 // ----------------------------------------------------------------------
 
@@ -59,7 +60,7 @@ export function Router() {
         { path: 'hisobotlar', element: <Hisobotlar /> },
         { path: 'reportCreate', element: <ReportCreate/> },
         { path: 'statistic', element: <Statistic/> },
-        { path: 'report', element: <Statistic/> },
+        { path: 'reportlar', element: <ReportHokim/> },
         { path: 'hisobotlars', element: <Statistic/> },
         {
           path: 'notifications',

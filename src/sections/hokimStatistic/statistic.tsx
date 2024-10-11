@@ -129,7 +129,7 @@ const Statistic: React.FC = () => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>ПТМ ни жами сони</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Мавжуд сон</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ишлаётгани</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Терилган пахта, тн</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сон</TableCell>

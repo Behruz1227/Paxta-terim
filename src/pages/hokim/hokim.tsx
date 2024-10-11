@@ -3,7 +3,9 @@ import { Helmet } from 'react-helmet-async';
 import { CONFIG } from 'src/config-global';
 
 import { SignInView } from 'src/sections/auth';
-import Statistic from 'src/sections/statistic/statistic';
+import ReportHokims from 'src/sections/hokimStatistic/reportHokim';
+import ReportHokim from 'src/sections/hokimStatistic/reportHokim';
+
 
 // ----------------------------------------------------------------------
 
@@ -14,7 +16,7 @@ export default function Page() {
         <title> {`Sign in - ${CONFIG.appName}`}</title>
       </Helmet>
 
-      <Statistic />
+      <ReportHokims />
     </>
   );
 }

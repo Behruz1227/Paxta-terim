@@ -1,20 +1,14 @@
 import type { Theme, SxProps, Breakpoint } from "@mui/material/styles";
-
 import { useEffect, useState } from "react";
-
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import { useTheme } from "@mui/material/styles";
-
 import { _langs, _notifications } from "src/_mock";
-
 import { Iconify } from "src/components/iconify";
-
 import { Main } from "./main";
 import { layoutClasses } from "../classes";
 import { NavMobile, NavDesktop } from "./nav";
 import { navUserData, navAdminData, navUser } from "../config-nav-dashboard";
-// import { Searchbar } from "../components/searchbar";
 import { _workspaces } from "../config-nav-workspace";
 import { MenuButton } from "../components/menu-button";
 import { LayoutSection } from "../core/layout-section";
@@ -22,13 +16,8 @@ import { HeaderSection } from "../core/header-section";
 import { AccountPopover } from "../components/account-popover";
 import { Badge, IconButton } from "@mui/material";
 import useGet from "src/hooks/get";
-import {
-  notificationCountAdmin,
-  notificationCountUser,
-} from "src/hooks/api/url";
+import { notificationCountAdmin, notificationCountUser } from "src/hooks/api/url";
 import { Link } from "react-router-dom";
-
-// ----------------------------------------------------------------------
 
 export type DashboardLayoutProps = {
   sx?: SxProps<Theme>;
@@ -38,28 +27,28 @@ export type DashboardLayoutProps = {
   };
 };
 
-export function DashboardLayout({
-  sx,
-  children,
-  header,
-}: DashboardLayoutProps) {
+export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) {
   const theme = useTheme();
-
   const [navOpen, setNavOpen] = useState(false);
   const role = sessionStorage.getItem("ROLE");
   const { data, get } = useGet();
 
   useEffect(() => {
     get(role === "ROLE_ADMIN" ? notificationCountAdmin : notificationCountUser);
-  }, []);
+  }, [role]);
 
   const layoutQuery: Breakpoint = "lg";
 
+  // Role asosida navData tanlash
+  const navData =
+    role === "ROLE_ADMIN"
+      ? navAdminData
+      : role === "ROLE_HOKIM" || role === "ROLE_USER"
+      ? navUser
+      : navUserData;
+
   return (
     <LayoutSection
-      /** **************************************
-       * Header
-       *************************************** */
       headerSection={
         <HeaderSection
           layoutQuery={layoutQuery}
@@ -86,7 +75,7 @@ export function DashboardLayout({
                   }}
                 />
                 <NavMobile
-                  data={role === "ROLE_ADMIN" ? navAdminData : navUserData || role === "ROLE_HOKIM" ? navUser: navUserData  || role === "ROLE_USER" ? navUserData : navUser}
+                  data={navData}
                   open={navOpen}
                   onClose={() => setNavOpen(false)}
                   workspaces={_workspaces}
@@ -95,15 +84,9 @@ export function DashboardLayout({
             ),
             rightArea: (
               <Box gap={1} display="flex" alignItems="center">
-                {/* <Searchbar />
-                <LanguagePopover data={_langs} /> */}
                 <Link to="/notifications">
-                  <IconButton
-                    color={"default"}
-                    // sx={sx}
-                    // {...other}
-                  >
-                    <Badge badgeContent={+data ? +data : 0} color="error">
+                  <IconButton color={"default"}>
+                    <Badge badgeContent={+data || 0} color="error">
                       <Iconify width={24} icon="solar:bell-bing-bold-duotone" />
                     </Badge>
                   </IconButton>
@@ -147,23 +130,10 @@ export function DashboardLayout({
           }}
         />
       }
-      /** **************************************
-       * Sidebar
-       *************************************** */
       sidebarSection={
-        <NavDesktop
-          data={role === "ROLE_ADMIN" ? navAdminData : navUserData || role === "ROLE_HOKIM" ? navUser: navUserData  || role === "ROLE_USER" ? navUserData : navUser}
-          layoutQuery={layoutQuery}
-          workspaces={_workspaces}
-        />
+        <NavDesktop data={navData} layoutQuery={layoutQuery} workspaces={_workspaces} />
       }
-      /** **************************************
-       * Footer
-       *************************************** */
       footerSection={null}
-      /** **************************************
-       * Style
-       *************************************** */
       cssVars={{
         "--layout-nav-vertical-width": "300px",
         "--layout-dashboard-content-pt": theme.spacing(1),

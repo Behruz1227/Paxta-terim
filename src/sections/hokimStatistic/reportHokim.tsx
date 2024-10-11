@@ -9,7 +9,7 @@ import useDelete from 'src/hooks/delete';
 import useGet from 'src/hooks/get';
 import usePut from 'src/hooks/put';
 
-const ReportsView: React.FC = () => {
+const ReportHokims: React.FC = () => {
   const { get: getFarms, data: farmsData, isLoading: farmsLoading } = useGet();
   const { remove: deleteFarms, data: delFarmsData, isLoading: delFarmsLoading } = useDelete();
   const { data: editFarmsData, isLoading: editFarmsLoading, put: editFarm } = usePut();
@@ -39,28 +39,11 @@ const ReportsView: React.FC = () => {
 
   console.log(farmsData);
 
-  const handleFarmEdit = () => {
-    editFarm(farms_global, farmId, {
-      farmName,
-      inn: farmInn,
-      cottonPickedId
-    });
-  };
 
   const toggleDelModal = () => setIsOpenDelModal(!isOpenDelModal);
   const toggleEditModal = () => setIsOpenEditModal(!isOpenEditModal);
 
-  useEffect(() => {
-    if (delFarmsData || editFarmsData) {
-      getFarms(`${farms_get}?page=${currentPage - 1}&size=${pageSize}`);
-      delFarmsData ? toggleDelModal() : toggleEditModal();
-      setFarmId('');
-      setCottonPickedId('');
-      setCurrentPage(1);
-      setPageSize(10);
-    }
-  }, [delFarmsData, editFarmsData]);
-
+  
   useEffect(() => {
     if (!isOpenEditModal || !isOpenEditModal) {
       setFarmInn('');
@@ -90,7 +73,6 @@ const ReportsView: React.FC = () => {
               <TableCell align="center">F.I.O</TableCell>
               <TableCell align="center">Sana</TableCell>
               <TableCell align="center">Vaqt</TableCell>
-              <TableCell align="center">Tahrirhlash</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -111,9 +93,6 @@ const ReportsView: React.FC = () => {
                   </TableCell>
                   <TableCell align="center">
                     <Skeleton variant="text" width={100} />
-                  </TableCell>
-                  <TableCell align="center">
-                    <Skeleton variant="rectangular" width={100} height={40} />
                   </TableCell>
                 </TableRow>
               ))
@@ -168,28 +147,6 @@ const ReportsView: React.FC = () => {
                   <TableCell align="center">
                     <Typography fontWeight="bold">{item.time}</Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <IconButton
-                      onClick={() => {
-                        toggleEditModal();
-                        setFarmId(item.farmId);
-                        setFarmName(item.farmName);
-                        setFarmInn(item.inn);
-                        setCottonPickedId(item.cottonPickedId);
-                      }}
-                    >
-                      <Iconify icon="solar:pen-bold" />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        toggleDelModal();
-                        setFarmId(item.farmId);
-                      }}
-                      sx={{ color: 'error.main' }}
-                    >
-                      <Iconify icon="solar:trash-bin-trash-bold" />
-                    </IconButton>
-                  </TableCell>
                 </TableRow>
               ))
             ) : (
@@ -209,33 +166,8 @@ const ReportsView: React.FC = () => {
           showSizeChanger={false}
         />
       )}
-      <Modals title="Fermani o'chirish" open={isOpenDelModal} onClose={toggleDelModal}>
-        <Box mt={2}>
-          <Button variant="contained" color="error" onClick={toggleDelModal}>
-            Bekor qilish
-          </Button>
-          <Button variant="contained" disabled={farmsLoading} onClick={handleFarmDelete} color="success" sx={{ ml: 2 }}>
-            {delFarmsLoading ? 'Yuklanmoqda...' : "O'chirish"}
-          </Button>
-        </Box>
-      </Modals>
-      <Modals title="Fermani tahrirlash" open={isOpenEditModal} onClose={toggleEditModal}>
-        <Box mt={2}>
-          <Inputs label="Farm nomi" value={farmName} onChange={e => setFarmName(e.target.value)} />
-          <Inputs label="INN" value={farmInn} onChange={e => setFarmInn(e.target.value)} />
-          <Inputs label="Cotton Picked Id" value={cottonPickedId} onChange={e => setCottonPickedId(e.target.value)} />
-          <Box>
-            <Button variant="contained" onClick={toggleEditModal}>
-              Bekor qilish
-            </Button>
-            <Button variant="contained" disabled={editFarmsLoading} onClick={handleFarmEdit} sx={{ ml: 2 }}>
-              {editFarmsLoading ? 'Yuklanmoqda...' : 'Tahrirlash'}
-            </Button>
-          </Box>
-        </Box>
-      </Modals>
     </div>
   );
 };
 
-export default ReportsView;
+export default ReportHokims;
