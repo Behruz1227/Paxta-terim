@@ -6,6 +6,10 @@ export const allUserGet: string = `${base_url}user/list`
 export const userGetMe: string = `${base_url}user/getMe`
 export const updateMe: string = `${base_url}user/edit/`
 
+
+export const timeGetUrl: string = `${base_url}user/interval-hour`
+export const timePutUrl: string = `${base_url}user/editTime`
+
 // post user admin
 export const postUsers: string = `${base_url}user/create`
 
@@ -42,3 +46,5 @@ export const report_time: string = `${base_url}report/times`
 export const cottom_get:string = `${base_url}cottonPicked/list`
 export const farmList:string = `${base_url}farm/list`
 export const reposrtAdd:string = `${base_url}report/create`
+
+

@@ -1,27 +1,29 @@
-import type { Theme, SxProps, Breakpoint } from '@mui/material/styles';
+import type { Theme, SxProps, Breakpoint } from "@mui/material/styles";
 
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 
-import Box from '@mui/material/Box';
-import Alert from '@mui/material/Alert';
-import { useTheme } from '@mui/material/styles';
+import Box from "@mui/material/Box";
+import Alert from "@mui/material/Alert";
+import { useTheme } from "@mui/material/styles";
 
-import { _langs, _notifications } from 'src/_mock';
+import { _langs, _notifications } from "src/_mock";
 
-import { Iconify } from 'src/components/iconify';
+import { Iconify } from "src/components/iconify";
 
-import { Main } from './main';
-import { layoutClasses } from '../classes';
-import { NavMobile, NavDesktop } from './nav';
-import { navUserData, navAdminData } from '../config-nav-dashboard';
-import { Searchbar } from '../components/searchbar';
-import { _workspaces } from '../config-nav-workspace';
-import { MenuButton } from '../components/menu-button';
-import { LayoutSection } from '../core/layout-section';
-import { HeaderSection } from '../core/header-section';
-import { AccountPopover } from '../components/account-popover';
-import { LanguagePopover } from '../components/language-popover';
-import { NotificationsPopover } from '../components/notifications-popover';
+import { Main } from "./main";
+import { layoutClasses } from "../classes";
+import { NavMobile, NavDesktop } from "./nav";
+import { navUserData, navAdminData } from "../config-nav-dashboard";
+import { Searchbar } from "../components/searchbar";
+import { _workspaces } from "../config-nav-workspace";
+import { MenuButton } from "../components/menu-button";
+import { LayoutSection } from "../core/layout-section";
+import { HeaderSection } from "../core/header-section";
+import { AccountPopover } from "../components/account-popover";
+import { LanguagePopover } from "../components/language-popover";
+import { NotificationsPopover } from "../components/notifications-popover";
+import { Badge, IconButton } from "@mui/material";
+import useGet from "src/hooks/get";
 
 // ----------------------------------------------------------------------
 
@@ -33,13 +35,22 @@ export type DashboardLayoutProps = {
   };
 };
 
-export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) {
+export function DashboardLayout({
+  sx,
+  children,
+  header,
+}: DashboardLayoutProps) {
   const theme = useTheme();
 
   const [navOpen, setNavOpen] = useState(false);
-  const role = sessionStorage.getItem('ROLE')
+  const role = sessionStorage.getItem("ROLE");
+  const { data, get } = useGet();
 
-  const layoutQuery: Breakpoint = 'lg';
+  useEffect(() => {
+    
+  }, [])
+
+  const layoutQuery: Breakpoint = "lg";
 
   return (
     <LayoutSection
@@ -58,7 +69,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
           sx={header?.sx}
           slots={{
             topArea: (
-              <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
+              <Alert severity="info" sx={{ display: "none", borderRadius: 0 }}>
                 This is an info Alert.
               </Alert>
             ),
@@ -68,11 +79,11 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                   onClick={() => setNavOpen(true)}
                   sx={{
                     ml: -1,
-                    [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
+                    [theme.breakpoints.up(layoutQuery)]: { display: "none" },
                   }}
                 />
                 <NavMobile
-                  data={role === 'ROLE_ADMIN' ? navAdminData : navUserData}
+                  data={role === "ROLE_ADMIN" ? navAdminData : navUserData}
                   open={navOpen}
                   onClose={() => setNavOpen(false)}
                   workspaces={_workspaces}
@@ -81,25 +92,49 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
             ),
             rightArea: (
               <Box gap={1} display="flex" alignItems="center">
-                <Searchbar />
-                <LanguagePopover data={_langs} />
-                <NotificationsPopover data={_notifications} />
+                {/* <Searchbar />
+                <LanguagePopover data={_langs} /> */}
+                <IconButton
+                  color={"default"}
+                  onClick={() => {}}
+                  // sx={sx}
+                  // {...other}
+                >
+                  <Badge badgeContent={99} color="error">
+                    <Iconify width={24} icon="solar:bell-bing-bold-duotone" />
+                  </Badge>
+                </IconButton>
                 <AccountPopover
                   data={[
                     {
-                      label: 'Home',
-                      href: '/',
-                      icon: <Iconify width={22} icon="solar:home-angle-bold-duotone" />,
+                      label: "Home",
+                      href: "/",
+                      icon: (
+                        <Iconify
+                          width={22}
+                          icon="solar:home-angle-bold-duotone"
+                        />
+                      ),
                     },
                     {
-                      label: 'Profile',
-                      href: '#',
-                      icon: <Iconify width={22} icon="solar:shield-keyhole-bold-duotone" />,
+                      label: "Profile",
+                      href: "#",
+                      icon: (
+                        <Iconify
+                          width={22}
+                          icon="solar:shield-keyhole-bold-duotone"
+                        />
+                      ),
                     },
                     {
-                      label: 'Settings',
-                      href: '#',
-                      icon: <Iconify width={22} icon="solar:settings-bold-duotone" />,
+                      label: "Settings",
+                      href: "#",
+                      icon: (
+                        <Iconify
+                          width={22}
+                          icon="solar:settings-bold-duotone"
+                        />
+                      ),
                     },
                   ]}
                 />
@@ -112,7 +147,11 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
        * Sidebar
        *************************************** */
       sidebarSection={
-        <NavDesktop data={role === 'ROLE_ADMIN' ? navAdminData : navUserData} layoutQuery={layoutQuery} workspaces={_workspaces} />
+        <NavDesktop
+          data={role === "ROLE_ADMIN" ? navAdminData : navUserData}
+          layoutQuery={layoutQuery}
+          workspaces={_workspaces}
+        />
       }
       /** **************************************
        * Footer
@@ -122,15 +161,15 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
        * Style
        *************************************** */
       cssVars={{
-        '--layout-nav-vertical-width': '300px',
-        '--layout-dashboard-content-pt': theme.spacing(1),
-        '--layout-dashboard-content-pb': theme.spacing(8),
-        '--layout-dashboard-content-px': theme.spacing(5),
+        "--layout-nav-vertical-width": "300px",
+        "--layout-dashboard-content-pt": theme.spacing(1),
+        "--layout-dashboard-content-pb": theme.spacing(8),
+        "--layout-dashboard-content-px": theme.spacing(5),
       }}
       sx={{
         [`& .${layoutClasses.hasSidebar}`]: {
           [theme.breakpoints.up(layoutQuery)]: {
-            pl: 'var(--layout-nav-vertical-width)',
+            pl: "var(--layout-nav-vertical-width)",
           },
         },
         ...sx,
