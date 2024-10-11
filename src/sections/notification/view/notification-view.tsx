@@ -58,23 +58,23 @@ export function NotificationView() {
 
   useEffect(() => {
     if (readData) {
-      toast.success("Ruxsat berildi");
+      toast.success("O'qildi deb belgilandi!");
       getNotification(
         `${role === "ROLE_ADMIN" ? notificationGetAdmin : notificationGetUser}`
       );
     } else if (readError) {
-      toast.error("Ruxsat berilmadi");
+      toast.error("O'qildi deb belgilanmadi");
     }
   }, [readError, readData]);
 
   useEffect(() => {
     if (deleteData) {
-      toast.success("Ruxsat berildi");
+      toast.success("Xabar o'chirildi!");
       getNotification(
         `${role === "ROLE_ADMIN" ? notificationGetAdmin : notificationGetUser}`
       );
     } else if (deleteError) {
-      toast.error("Ruxsat berilmadi");
+      toast.error("Xabar o'chirilmadi");
     }
   }, [deleteError, deleteData]);
 
@@ -94,7 +94,6 @@ export function NotificationView() {
   // Function to handle gathering all IDs for delete
   const handleDeleteAll = () => {
     const allIds = data?.object?.map((item: any) => item.id);
-
     if (allIds?.length > 0) {
       deleteNotifi(notificationDelete, { list: allIds });
     } else {
