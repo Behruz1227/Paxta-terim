@@ -16,13 +16,14 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
+  Modal,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Scrollbar } from "src/components/scrollbar";
 
 import { CONFIG } from "src/config-global";
-import { getMachine } from "src/hooks/api/url";
+import { getDistirct, getMachine, postMachine } from "src/hooks/api/url";
 import useGet from "src/hooks/get";
 import { TableNoData } from "src/sections/user/table-no-data";
 import { UserTableHead } from "src/sections/user/user-table-head";
@@ -33,10 +34,17 @@ import { Modals } from "src/components/modal/modal";
 import { Inputs } from "src/components/input/input";
 import { MenuItem } from "@mui/material";
 import { DialogContent } from "@mui/material";
+import usePost from "src/hooks/post";
+import toast from "react-hot-toast";
+import useDelete from "src/hooks/delete";
 
-export default function Page() {
+export default function Machine() {
   const { data, get, error, isLoading } = useGet();
+  const { data: desData, get: desGet } = useGet();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  // const { remove, data:remData, error:remError, isLoading: remLoad } = useDelete()
   const [formData, setFormData] = useState({
     districtId: 0,
     farmName: "",
@@ -52,23 +60,55 @@ export default function Page() {
     lavozimi: "",
   });
   const [errors, setErrors] = useState<any>({});
-
+  const { data: response, post, error: postError } = usePost()
   const table = useTable();
 
-  useEffect(() => {
-    get(getMachine);
-  }, []);
-
-  const openModal = () => setIsModalOpen(true);
+  const openModal = () => {
+    setIsModalOpen(true);
+    desGet(getDistirct)
+  }
   const closeModal = () => {
     resetValue();
     setIsModalOpen(false);
   };
 
+  const openDeleteModal = (id: number) => {
+    setSelectedItemId(id);
+    setIsDeleteModalOpen(true);
+  };
+  const closeDeleteModal = () => {
+    setSelectedItemId(null);
+    setIsDeleteModalOpen(false);
+  };
+  const handleDelete = () => {
+    // O'chirish logikasi shu yerda bo'ladi
+    console.log("Deleted item with ID:", selectedItemId);
+    closeDeleteModal(); // Modaldan chiqish
+  };
+  useEffect(() => {
+    get(getMachine);
+    desGet(getDistirct)
+  }, []);
+
+  useEffect(() => {
+    if (response) {
+      closeModal();
+      toast.success("Mashina qo'shildi");
+      get(getMachine);
+      resetValue();
+      // console.log("Mashina", respo);
+
+    } else if (postError) {
+      closeModal();
+      toast.error('Xato!');
+
+    }
+  }, [response, postError]);
+
+
   const handleChange = (field: string, value: any) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
   };
-
   const resetValue = () => {
     setFormData({
       districtId: 0,
@@ -89,7 +129,6 @@ export default function Page() {
 
   const validate = () => {
     const newErrors: any = {};
-
     if (!formData.districtId) newErrors.districtId = "Tumanni tanlang";
     if (!formData.farmName) newErrors.farmName = "Ferma nomini kiriting";
     if (!formData.ownerFullName)
@@ -111,11 +150,14 @@ export default function Page() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleFormSubmit = () => {
-    if (validate()) {
-      console.log(formData);
+  const handleFormSubmit = async () => {
+    try {
+      await post(postMachine, formData);
+    } catch {
+      alert('Xato! Iltimos, qayta urinib ko‘ring.');
     }
   };
+
 
   return (
     <div>
@@ -133,7 +175,7 @@ export default function Page() {
             startIcon={<Iconify icon="mingcute:add-line" />}
             onClick={openModal}
           >
-            Yangi qo'shish
+            Yangi qo&apos;shish
           </Button>
         </Box>
         {isLoading ? (
@@ -219,7 +261,7 @@ export default function Page() {
                                 <Iconify icon="solar:pen-bold" />
                               </IconButton>
                               <IconButton
-                                // onClick={handleDelete}
+                                onClick={() => openDeleteModal(1)}
                                 sx={{ color: "error.main" }}
                               >
                                 <Iconify icon="solar:trash-bin-trash-bold" />
@@ -237,37 +279,50 @@ export default function Page() {
             </Scrollbar>
           </Card>
         )}
+        <Dialog open={isDeleteModalOpen} onClose={closeDeleteModal}>
+          <DialogTitle>Ma&apos;lumotni o&apos;chirish</DialogTitle>
+          <DialogContent>
+            <Typography>Haqiqatan ham ushbu malumotni o&apos;chirmoqchimisiz?</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeDeleteModal} color="inherit">
+              Bekor qilish
+            </Button>
+            <Button onClick={handleDelete} color="error" variant="contained">
+              O&apos;chirish
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Dialog
           title="Foydalanuvchi qo'shish"
           open={isModalOpen}
           onClose={closeModal}
           maxWidth="xl"
-          
+
         >
-          <DialogTitle>Mashina qo'shish</DialogTitle>
-          <DialogContent className="md:min-w-[700px]"> 
-            <Box className="grid md:grid-cols-2 gap-x-10">
+          <DialogTitle>Mashina qo&apos;shish</DialogTitle>
+          <DialogContent className="md:min-w-[700px]">
+            <Box className="grid md:grid-cols-2 gap-x-10 pt-3">
               <div>
-              <FormControl
-                fullWidth
-                error={!!errors.districtId}
-              >
-                <InputLabel>Tumanni tanlang</InputLabel>
-                <Select
-                  value={formData.districtId}
-                  onChange={(e) => handleChange("districtId", e.target.value)}
-                  label="Tumanni tanlang"
+                <FormControl
+                  fullWidth
+                  error={!!errors.districtId}
                 >
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
+                  <InputLabel>Tumanni tanlang</InputLabel>
+                  <Select
+                    value={formData.districtId}
+                    onChange={(e) => handleChange("districtId", e.target.value)}
+                    label="Tumanni tanlang"
+                  >
+                    {desData && desData.map((item: { id: number, name: string }) => (
+                      <MenuItem value={item.id}>{item.name}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
                 {errors.districtId && (
                   <Typography color="error">{errors.districtId}</Typography>
                 )}
               </div>
-
               <Inputs
                 onChange={(e) => handleChange("farmName", e.target.value)}
                 value={formData.farmName}
@@ -298,13 +353,30 @@ export default function Page() {
                 error={!!errors.machineId}
                 helperText={errors.machineId}
               />
-              <Inputs
+              {/* <Inputs
                 onChange={(e) => handleChange("machineModel", e.target.value)}
                 value={formData.machineModel}
                 label="Mashina modelini kiriting"
                 error={!!errors.machineModel}
                 helperText={errors.machineModel}
-              />
+              /> */}
+              <FormControl
+                fullWidth
+                error={!!errors.machineModel}
+              >
+                <InputLabel>machine madelini tanlang</InputLabel>
+                <Select
+                  value={formData.machineModel}
+                  onChange={(e) => handleChange("machineModel", e.target.value)}
+                  label="machineModel tanlang"
+                >
+                  <MenuItem value='CE_220'>CE_220</MenuItem>
+                  <MenuItem value='JOHN_DEERE'>JOHN_DEERE</MenuItem>
+                  <MenuItem value='BOSHIRAN'>BOSHIRAN</MenuItem>
+                  <MenuItem value='FM_WORLD'>FM_WORLD</MenuItem>
+                  <MenuItem value='DONG_FENG'>DONG_FENG</MenuItem>
+                </Select>
+              </FormControl>
               <Inputs
                 onChange={(e) => handleChange("year", e.target.value)}
                 value={formData.year}
@@ -360,7 +432,7 @@ export default function Page() {
                 onClick={handleFormSubmit}
                 sx={{ ml: 2 }}
               >
-                Foydalanuvchi qo'shish
+                Foydalanuvchi qo&apos;shish
               </Button>
             </Box>
           </DialogActions>

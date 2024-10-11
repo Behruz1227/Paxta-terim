@@ -11,6 +11,7 @@ import {
   Typography,
   Button,
   IconButton,
+  Select,
 } from "@mui/material";
 import { DashboardContent } from "src/layouts/dashboard";
 import { Iconify } from "src/components/iconify";
@@ -25,6 +26,7 @@ import {
 } from "src/hooks/api/url";
 import usePost from "src/hooks/post";
 import toast from "react-hot-toast";
+import { MenuItem } from "@mui/material";
 
 export function NotificationView() {
   const role = sessionStorage.getItem("ROLE");
@@ -156,12 +158,22 @@ export function NotificationView() {
                     </Typography>
                   </TableCell>
                   <TableCell align="center" component="th" scope="row">
-                    <Button
+
+                    <Select
+                    value={item?.status}
+                    onChange={(e) => {
+                      editStatus(
+                        `${notificationConfirmed}?id=${item.id}&status=${e.target.value}`,
+                        {}
+                      );
+                    }}
+                    >
+                      <MenuItem value={"RUXSAT_SURALMOQDA"}>Ruxsat so'ralmoqda</MenuItem>
+                      <MenuItem value={"RUXSAT_BERILDI"}>Ruxsat berildi</MenuItem>
+                    </Select>
+                    {/* <Button
                       onClick={() => {
-                        editStatus(
-                          `${notificationConfirmed}?id=${item.id}&status=RUXSAT_BERILDI`,
-                          {}
-                        );
+                        
                       }}
                       disabled={
                         item?.status && item?.status !== "RUXSAT_SURALMOQDA"
@@ -180,7 +192,7 @@ export function NotificationView() {
                           ? "Ruxsat berish"
                           : "Ruxsat berilgan"}
                       </Typography>
-                    </Button>
+                    </Button> */}
                   </TableCell>
                   <TableCell align="center">
                     {!item.read && (
