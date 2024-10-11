@@ -16,7 +16,7 @@ import { useRouter, usePathname } from "src/routes/hooks";
 
 import { _myAccount } from "src/_mock";
 import useGet from "src/hooks/get";
-import { updateMe, userGetMe } from "src/hooks/api/url";
+import { timeGetUrl, timePutUrl, updateMe, userGetMe } from "src/hooks/api/url";
 import { Iconify } from "src/components/iconify";
 import {
   Dialog,
@@ -45,13 +45,22 @@ export function AccountPopover({
   ...other
 }: AccountPopoverProps) {
   const { data: datas, get: getUserMe, error, isLoading } = useGet();
+  const { data: timeData, get: timeGet } = useGet();
   const {
     data: updateData,
     error: updateError,
     isLoading: updateLoading,
     put: update,
   } = usePut();
+  const {
+    data: timePutData,
+    error: timeError,
+    isLoading: timeLoading,
+    put: time,
+  } = usePut();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalTime, setIsModalTime] = useState(false);
+  const [timeInterval, setTimeInterval] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -62,6 +71,7 @@ export function AccountPopover({
   const [errors, setErrors] = useState<any>({});
 
   const router = useRouter();
+  const role = sessionStorage.getItem("ROLE");
 
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(
     null
@@ -80,26 +90,43 @@ export function AccountPopover({
 
   useEffect(() => {
     getUserMe(userGetMe);
+    timeGet(timeGetUrl);
   }, []);
 
-  useEffect(() =>  {
+  useEffect(() => {
     if (updateData) {
       console.log(updateData);
-      
-      sessionStorage.setItem("token", updateData?.body)
-      closeModal()
-      toast.success("Profil tahrirlandi!")
+      updateData?.body && sessionStorage.setItem("token", updateData?.body);
+      closeModal();
+      toast.success("Profil tahrirlandi!");
       getUserMe(userGetMe);
     } else if (updateError) {
-      closeModal()
-      toast.error("Profil tahrirlanmadi")
+      closeModal();
+      toast.error("Profil tahrirlanmadi");
     }
   }, [updateData, updateError]);
+
+  useEffect(() => {
+    if (timePutData) {
+      closeTimeModal();
+      toast.success("Vaqt interval tahrirlandi!");
+      timeGet(timeGetUrl);
+    } else if (timeError) {
+      closeTimeModal();
+      toast.error("Vaqt interval tahrirlanmadi");
+    }
+  }, [timePutData, timeError]);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     resetValue();
     setIsModalOpen(false);
+  };
+
+  const openTimeModal = () => setIsModalTime(true);
+  const closeTimeModal = () => {
+    resetValue();
+    setIsModalTime(false);
   };
 
   const handleChange = (field: string, value: any) => {
@@ -248,6 +275,22 @@ export function AccountPopover({
             <p>Lavozim : </p>
             <p>{datas?.lavozimi ? datas?.lavozimi : "-"}</p>
           </MenuItem>
+          {role === "ROLE_ADMIN" && (
+            <MenuItem className="flex w-full justify-between">
+              <p className="text-gray-700 font-semibold">Vaqt intervali : </p>
+              <div className="flex w-full justify-end gap-5 items-center">
+                <p>{timeData ? timeData : 0} soat</p>
+                <IconButton
+                  onClick={() => {
+                    setTimeInterval(timeData ? timeData : "");
+                    openTimeModal();
+                  }}
+                >
+                  <Iconify className="w-3 h-3" icon="solar:pen-bold" />
+                </IconButton>
+              </div>
+            </MenuItem>
+          )}
         </MenuList>
 
         <Divider sx={{ borderStyle: "dashed" }} />
@@ -329,6 +372,53 @@ export function AccountPopover({
               sx={{ ml: 2 }}
             >
               {updateLoading ? "Yuklanmoqda..." : "Tahrirlash"}
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        title="Foydalanuvchi qo'shish"
+        open={isModalTime}
+        onClose={closeTimeModal}
+        maxWidth="xl"
+      >
+        <DialogTitle>Vaqt intervalni tahrirlash</DialogTitle>
+        <DialogContent className="min-w-[400px]">
+          <Box className="">
+            <Inputs
+              type="number"
+              onChange={(e) => setTimeInterval(e.target.value)}
+              value={timeInterval}
+              label="Vaqtni kiriting"
+              error={+timeInterval < 0 || +timeInterval > 24}
+              helperText={
+                +timeInterval < 0 || +timeInterval > 24
+                  ? "Vaqt 0 dan katta 24 dan kichik bo'lishi kerak"
+                  : ""
+              }
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Box
+            mt={2}
+            className="flex flex-col md:flex-row items-end gap-5 justify-center "
+          >
+            <Button variant="contained" color="error" onClick={closeTimeModal}>
+              Bekor qilish
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => {
+                +timeInterval > 0 && +timeInterval < 24
+                  ? time(timePutUrl, `?time=${timeInterval}`, {})
+                  : () => {};
+              }}
+              sx={{ ml: 2 }}
+            >
+              {timeLoading ? "Yuklanmoqda..." : "Tahrirlash"}
             </Button>
           </Box>
         </DialogActions>

@@ -6,6 +6,10 @@ export const allUserGet: string = `${base_url}user/list`
 export const userGetMe: string = `${base_url}user/getMe`
 export const updateMe: string = `${base_url}user/edit/`
 
+
+export const timeGetUrl: string = `${base_url}user/interval-hour`
+export const timePutUrl: string = `${base_url}user/editTime`
+
 // post user admin
 export const postUsers: string = `${base_url}user/create`
 
@@ -42,3 +46,13 @@ export const report_time: string = `${base_url}report/times`
 export const cottom_get:string = `${base_url}cottonPicked/list`
 export const farmList:string = `${base_url}farm/list`
 export const reposrtAdd:string = `${base_url}report/create`
+
+
+// Notifications urls
+export const notificationRead:string = `${base_url}notification/read`
+export const notificationConfirmed:string = `${base_url}notification/confirmation`
+export const notificationGetUser:string = `${base_url}notification/page/user`
+export const notificationGetAdmin:string = `${base_url}notification/page/admin`
+export const notificationCountUser:string = `${base_url}notification/count/master`
+export const notificationCountAdmin:string = `${base_url}notification/count/admin`
+export const notificationDelete:string = `${base_url}notification/delete`
