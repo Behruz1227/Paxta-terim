@@ -25,25 +25,30 @@ import { Inputs } from 'src/components/input/input';
 import { cottom_get, farmList, getDistirct, report_time, reposrtAdd } from 'src/hooks/api/url';
 import useGet from 'src/hooks/get';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const ReportView: React.FC = () => {
     const { get: getFarms, data: farmsData, isLoading: farmsLoading } = useGet();
     const { get: cottom, data: cottomData, isLoading: cottomLoading } = useGet();
     const { get: farmsLar, data: farmData, isLoading: farmLoading } = useGet();
-    const { get: reports, data: reportsTime, isLoading: reportsLoading } = useGet();
+    const { get: reports, data: reportsTime, isLoading: reportsLoading} = useGet();
 
-    const [farmId, setFarmId] = useState(''); // Store selected farmId
+    const [farmId, setFarmId] = useState(''); 
     const [selectedHudud, setSelectedHudud] = useState('');
     const [selectedHududId, setSelectedHududId] = useState('');
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [isModalDelete, setIsModalDelete] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<string | null>(null);
 
-    const [firstname, setFirstName] = useState('');  // Paxta maydoni
+    const [ptmMaydoni, setPtmMaydoni] = useState('');  // Paxta maydoni
     const [lastName, setLastName] = useState('');    // Paxta hajmi
     const [phoneNumber, setPhoneNumber] = useState(''); // PTM ishlashi (true/false)
-    const [password, setPassword] = useState('');    // PTM ni ishsiz holati
-    const [lavozimi, setLavozimi] = useState('');    // PTM holati / Sana / Vaqt
+    const [password, setPassword] = useState('');    
+    const [lavozimi, setLavozimi] = useState(true);
+    const [ptmHolati, setPtmHolati] = useState(null);
+    const [hour, setHour] = useState('');
+    const [paxtaHajmi, setPaxtaHajmi] = useState('');
+    
 
     useEffect(() => {
         getFarms(`${getDistirct}`);
@@ -118,20 +123,25 @@ const ReportView: React.FC = () => {
     const handleFormSubmit = () => {
         const reportData = {
             farmId: farmId,
-            dialField: firstname ? parseInt(firstname) : 0,
-            cottonSize: lastName ? parseInt(lastName) : 0,
-            machineActive: phoneNumber === 'true',
-            downTime: password ? parseInt(password) : 0,
-            machineStatus: lavozimi,
+            dialField: ptmMaydoni? parseInt(ptmMaydoni) : 0,
+            cottonSize: paxtaHajmi ? parseInt(paxtaHajmi) : 0,
+            machineActive: lavozimi,
+            downTime: password ? parseInt(password) : null,
+            machineStatus:ptmHolati,
             date: new Date().toISOString().split('T')[0],
-            hour: parseInt(lavozimi.split(':')[0]),
-            minute: parseInt(lavozimi.split(':')[1]),
+            hour: parseInt(hour.split(':')[0]),
+            minute: parseInt(hour.split(':')[1]),
         };
+        console.log(reportData);
+        
         axios.post(`${reposrtAdd}`, reportData)
             .then(response => {
+                toast("Hisobot muvaffaqiyatli qo'shildi ✅")
+                closeModal()
                 console.log('Report submitted successfully', response.data);
             })
             .catch(error => {
+                toast("Hisobot qo'shilmadi ❌")
                 console.error('Error submitting report', error);
             });
 
@@ -223,27 +233,86 @@ const ReportView: React.FC = () => {
                 <Dialog open={isModalDelete} onClose={closeModal} maxWidth="sm" fullWidth>
                     <DialogTitle>Hisobot qo'shish</DialogTitle>
                     <DialogContent>
+                        Paxta maydoni (gektar)
                         <Inputs
                             label="Paxta maydoni"
-                            value={firstname}
-                            onChange={handleInputChange(setFirstName)}
+                            value={ptmMaydoni}
+                            onChange={handleInputChange(setPtmMaydoni)}
                             type="number"
                         />
                         <div className='p-4'></div>
+                        Paxta hajmi (tonna)
                         <Inputs
                             label="Paxta hajmi"
-                            value={lastName}
-                            onChange={handleInputChange(setLastName)}
+                            value={paxtaHajmi}
+                            onChange={handleInputChange(setPaxtaHajmi)}
                             type="number"
                         />
                         <div className='p-4'></div>
+                        <div>
+                            <div>Hisobot topshirish vaqti</div>
+                            <div>
+                                {reportsTime?.map((time: any, index: number) => (
+                                    <Button
+                                        key={index}
+                                        variant={time === phoneNumber ? "contained" : "outlined"}
+                                        onClick={() => setHour(time)}
+                                        style={{ margin: "4px" }}
+                                    >
+                                        {time.split(":")[0]}:{time.split(":")[4] !== "00" ? time.split(":")[1] : ""}
+                                    </Button>
+                                ))}
+                            </div>
+                        </div>
+                        <div className='p-4'></div>
+                         Vaqt
+                        <Inputs
+                            label=""
+                            value={lastName}
+                            onChange={handleInputChange(setLastName)}
+                            type="date"
+                        />
+                        <div className='p-4 '>
+                            Mashina holati
+                            <FormControl fullWidth disabled={!farmId} className="">
+                                <div className='flex justify-center '>
+                                    <div className='px-8'>
+                                        <Button
+                                            variant={lavozimi ? "contained" : "outlined"} // Highlight 'True' when lavozimi is true
+                                            color="success"
+                                            onClick={() => setLavozimi(true)}
+                                        >
+                                            True
+                                        </Button>
+                                    </div>
+                                    <div className='px-8'>
+                                        <Button
+                                            variant={!lavozimi ? "contained" : "outlined"} 
+                                            color="error"
+                                            onClick={() => setLavozimi(false)}
+                                        >
+                                            False
+                                        </Button>
+                                    </div>
+
+                                </div>
+                            </FormControl>
+                        </div>  
+                        {lavozimi ? (
+                            <div>
+
+                            </div>
+                        ) :
+                          <> 
+                                <div className='p-4'></div>
+                        Mashina ishlamagnlik sababi
                         <FormControl fullWidth disabled={!farmId}>
                             <InputLabel id="machine-status-label">Mashina holati</InputLabel>
                             <Select
                                 labelId="machine-status-label"
                                 id="machine-status-select"
-                                value={lavozimi}
-                                onChange={(e) => setLavozimi(e.target.value)}
+                                value={ptmHolati}
+                                onChange={(e) => setPtmHolati(e.target.value)}
                             >
                                 {machineStatusOptions?.map((option, index) => (
                                     <MenuItem key={index} value={option}>
@@ -253,58 +322,17 @@ const ReportView: React.FC = () => {
                             </Select>
                         </FormControl>
                         <div className='p-4'></div>
-                        <FormControl fullWidth disabled={!farmId}>
-                            <InputLabel id="machine-status-label">Mashina holati</InputLabel>
-                            <Select
-                                labelId="machine-status-label"
-                                id="machine-status-select"
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
-                            >
-                                {reportsTime?.map((time:any, index:number) => (
-                                    <MenuItem key={index} value={time}>
-                                        {time}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-
-                        {/* <Inputs
-                            label="PTM ishlashi"
-                            value={phoneNumber}
-                            onChange={handleInputChange(setPhoneNumber)}
-                            type="text" 
-                        /> */}
-                        <div className='p-4'></div>
+                        PTM ni qancha vaqt ishlamaganligi (daqiqada)
                         <Inputs
-                            label="PTM ni ishsiz holati"
+                            label="PTM ni ishsiz vaqti"
                             value={password}
                             onChange={handleInputChange(setPassword)}
                             type="number"
                         />
-                        <div className='p-4'></div>
-                        {/* <Inputs
-                            label="PTM holati"
-                            value={lavozimi}
-                            onChange={handleInputChange(setLavozimi)}
-                            type="text"
-                        /> */}
-                        <div className='p-4'></div>
-                        <Inputs
-                            label="Sana"
-                            value={lavozimi}
-                            onChange={handleInputChange(setLavozimi)}
-                            type="date"
-                        />
-                        <div className='p-4'></div>
-                        <Inputs
-                            label="Vaqt"
-                            value={lavozimi}
-                            onChange={handleInputChange(setLavozimi)}
-                            type="time"
-                        />
+                        
+                        </> 
+                        } 
                     </DialogContent>
-
                     <DialogActions>
                         <Button variant="outlined" color="error" onClick={closeModal}>Cancel</Button>
                         <Button variant="contained" color="success" onClick={handleFormSubmit}>Submit</Button>
