@@ -16,12 +16,12 @@ const usePost = () => {
       const response = await axios.post(url, postData);
       console.log('Response:', response);
       if (response.data && response.data.success) {
-        setData(response.data.body);
+        setData(response.data);
       } else {
         throw new Error('Unsuccessful request: ' + (response.data?.message || 'Unknown error'));
       }
 
-      return response.data.body;
+      return response.data;
     } catch (err: any) {
       console.error('Error:', err);
       setError(err);
