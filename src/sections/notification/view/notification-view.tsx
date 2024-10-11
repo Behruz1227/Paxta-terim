@@ -23,20 +23,17 @@ import {
   notificationGetUser,
   notificationRead,
 } from "src/hooks/api/url";
-import useDelete from "src/hooks/delete";
-import usePut from "src/hooks/put";
 import usePost from "src/hooks/post";
 import toast from "react-hot-toast";
 
 export function NotificationView() {
   const role = sessionStorage.getItem("ROLE");
   const [isModalDelete, setIsModalDelete] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const { data, error, get: getNotification, isLoading } = useGet();
-  const { data: deleteData, post: deleteNotifi } = usePost();
-  const { data: readData, post: readNotifi } = usePost();
-  const { data: editData, post: editStatus, error: editError } = usePost();
+  const { data, get: getNotification } = useGet();
+  const { post: deleteNotifi, data: deleteData, error: deleteError } = usePost();
+  const { post: readNotifi, data: readData, error: readError  } = usePost();
+  const { post: editStatus, data: editData, error: editError } = usePost();
 
   const closeModal = () => {
     setIsModalDelete(false);
@@ -59,14 +56,59 @@ export function NotificationView() {
     }
   }, [editError, editData]);
 
+  useEffect(() => {
+    if (readData) {
+      toast.success("O'qildi deb belgilandi!");
+      getNotification(
+        `${role === "ROLE_ADMIN" ? notificationGetAdmin : notificationGetUser}`
+      );
+    } else if (readError) {
+      toast.error("O'qildi deb belgilanmadi");
+    }
+  }, [readError, readData]);
+
+  useEffect(() => {
+    if (deleteData) {
+      toast.success("Xabar o'chirildi!");
+      getNotification(
+        `${role === "ROLE_ADMIN" ? notificationGetAdmin : notificationGetUser}`
+      );
+    } else if (deleteError) {
+      toast.error("Xabar o'chirilmadi");
+    }
+  }, [deleteError, deleteData]);
+
+  // Function to handle gathering IDs where read === true
+  const handleReadNotification = () => {
+    const readItems = data?.object
+      ?.filter((item: any) => item.read === true)
+      .map((item: any) => item.id);
+
+    if (readItems?.length > 0) {
+      readNotifi(notificationRead, { list: readItems });
+    } else {
+      toast.error("No read notifications found.");
+    }
+  };
+
+  // Function to handle gathering all IDs for delete
+  const handleDeleteAll = () => {
+    const allIds = data?.object?.map((item: any) => item.id);
+    if (allIds?.length > 0) {
+      deleteNotifi(notificationDelete, { list: allIds });
+    } else {
+      toast.error("No notifications to delete.");
+    }
+  };
+
   return (
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
           Xabarlar
         </Typography>
-        <div className="">
-          <IconButton>
+        <div>
+          <IconButton onClick={handleReadNotification}>
             <Iconify
               width={27}
               height={27}
@@ -74,7 +116,7 @@ export function NotificationView() {
               icon="line-md:check-all"
             />
           </IconButton>
-          <IconButton sx={{ color: "error.main" }}>
+          <IconButton sx={{ color: "error.main" }} onClick={handleDeleteAll}>
             <Iconify width={27} height={27} icon="ic:baseline-delete-sweep" />
           </IconButton>
         </div>
@@ -147,7 +189,10 @@ export function NotificationView() {
                           readNotifi(notificationRead, { list: [item.id] });
                         }}
                       >
-                        <Iconify color={"green"} icon="mingcute:check-2-fill" />
+                        <Iconify
+                          color={"green"}
+                          icon="mingcute:check-2-fill"
+                        />
                       </IconButton>
                     )}
                     <IconButton
@@ -163,8 +208,8 @@ export function NotificationView() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={3} align="center">
-                  No districts found.
+                <TableCell colSpan={6} align="center">
+                  Xabarlar topilmadi.
                 </TableCell>
               </TableRow>
             )}
