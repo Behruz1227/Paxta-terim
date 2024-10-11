@@ -61,4 +61,7 @@ export const notificationDelete:string = `${base_url}notification/delete`
 //Statistika admin 
 export const statistic = `${base_url}statistic/report`
 
+//Report 
+export const reportAdmin = `${base_url}report/admin`
+
 
