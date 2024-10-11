@@ -29,6 +29,7 @@ import EditUserModal from '../editModal';
 import useDelete from 'src/hooks/delete';
 import { Pagination } from 'antd';
 
+
 export function UserView() {
   const { userData, setUserData } = useUserAll();
   const table = useTable();
@@ -41,7 +42,7 @@ export function UserView() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [lavozimi, setLavozimi] = useState('')
   const [password, setPassword] = useState('')
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const { data, error, get: getUser, isLoading } = useGet()
   const { id } = useDeletes()
@@ -68,7 +69,7 @@ export function UserView() {
   const handlePaginationChange = (page: number, size: number) => {
     setCurrentPage(page);
     setPageSize(size);
-};
+  };
 
   const handleFormSubmit = () => {
     postUser(`${postUsers}`, {
@@ -83,7 +84,7 @@ export function UserView() {
   };
 
   useEffect(() => {
-    getUser(`${allUserGet}?page=${currentPage}&size=${pageSize}`);
+    getUser(`${allUserGet}?page=${currentPage - 1}&size=${pageSize}`);
   }, [setUserData, currentPage, pageSize]);
 
   const del = () => {
@@ -113,7 +114,6 @@ export function UserView() {
           New user
         </Button>
       </Box>
-
       <Card>
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
@@ -136,7 +136,7 @@ export function UserView() {
                   { id: 'role', label: 'Telefon raqam' },
                   { id: 'isVerified', label: 'Lavozimi', align: 'center' },
                   { id: 'status', label: 'Active' },
-                  { id: '' },
+                  { id: 'holati', label:"Tahrirlash" },
                 ]}
               />
               <TableBody>
@@ -158,13 +158,16 @@ export function UserView() {
               </TableBody>
             </Table>
             {data && (
+              <div className='mb-4 mt-2'>
                 <Pagination
-                    current={currentPage}
-                    pageSize={pageSize}
-                    total={data.totalElements}
-                    onChange={handlePaginationChange}
-                    showSizeChanger={false}
+                  current={currentPage}
+                  pageSize={pageSize}
+                  total={data.totalElements}
+                  onChange={handlePaginationChange}
+                  showSizeChanger={false}
                 />
+              </div>
+
             )}
           </TableContainer>
         </Scrollbar>

@@ -76,7 +76,7 @@ export function UserTableRow({ row, selected, onSelectRow, onEdit, onDelete }: U
           </Label>
         </TableCell>
 
-        <TableCell align="right">
+        <TableCell align="center">
           <IconButton onClick={() => onEdit(row.id)}>
             <Iconify icon="solar:pen-bold" />
           </IconButton>
