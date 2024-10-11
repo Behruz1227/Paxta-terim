@@ -48,3 +48,11 @@ export const farmList:string = `${base_url}farm/list`
 export const reposrtAdd:string = `${base_url}report/create`
 
 
+// Notifications urls
+export const notificationRead:string = `${base_url}notification/read`
+export const notificationConfirmed:string = `${base_url}notification/confirmation`
+export const notificationGetUser:string = `${base_url}notification/page/user`
+export const notificationGetAdmin:string = `${base_url}notification/page/admin`
+export const notificationCountUser:string = `${base_url}notification/count/master`
+export const notificationCountAdmin:string = `${base_url}notification/count/admin`
+export const notificationDelete:string = `${base_url}notification/delete`
