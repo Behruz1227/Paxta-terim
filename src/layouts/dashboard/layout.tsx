@@ -13,7 +13,7 @@ import { Iconify } from "src/components/iconify";
 import { Main } from "./main";
 import { layoutClasses } from "../classes";
 import { NavMobile, NavDesktop } from "./nav";
-import { navUserData, navAdminData } from "../config-nav-dashboard";
+import { navUserData, navAdminData, navUser } from "../config-nav-dashboard";
 // import { Searchbar } from "../components/searchbar";
 import { _workspaces } from "../config-nav-workspace";
 import { MenuButton } from "../components/menu-button";
@@ -86,7 +86,7 @@ export function DashboardLayout({
                   }}
                 />
                 <NavMobile
-                  data={role === "ROLE_ADMIN" ? navAdminData : navUserData}
+                  data={role === "ROLE_ADMIN" ? navAdminData : navUserData || role === "ROLE_HOKIM" ? navUser: navUserData  || role === "ROLE_USER" ? navUserData : navUser}
                   open={navOpen}
                   onClose={() => setNavOpen(false)}
                   workspaces={_workspaces}
@@ -152,7 +152,7 @@ export function DashboardLayout({
        *************************************** */
       sidebarSection={
         <NavDesktop
-          data={role === "ROLE_ADMIN" ? navAdminData : navUserData}
+          data={role === "ROLE_ADMIN" ? navAdminData : navUserData || role === "ROLE_HOKIM" ? navUser: navUserData  || role === "ROLE_USER" ? navUserData : navUser}
           layoutQuery={layoutQuery}
           workspaces={_workspaces}
         />

@@ -20,6 +20,9 @@ export default function App() {
         } else if (role === 'ROLE_USER') {
           navigate('/machines')
         }
+        else if (role === 'ROLE_HOKIM') {
+          navigate('/machines')
+        }
       } else {
         navigate('sign-in');
       }

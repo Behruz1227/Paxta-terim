@@ -57,3 +57,11 @@ export const navUserData = [
   },
 
 ];
+
+export const navUser = [
+  {
+    title: 'Hisobotlars',
+    path: '/hisobotlars',
+    icon: icon('ic-analytics'),
+  },
+];

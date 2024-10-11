@@ -46,6 +46,8 @@ export function SignInView() {
           router.push('/dashboard');
         } else if (res.data.body === 'ROLE_MASTER') {
           router.push('/hisobotlar');
+        } else if (res.data.body === 'ROLE_HOKIM'){
+          router.push('/hisobotlars');
         }
         else {
           router.push('/blog');

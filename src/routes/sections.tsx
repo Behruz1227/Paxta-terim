@@ -59,6 +59,8 @@ export function Router() {
         { path: 'hisobotlar', element: <Hisobotlar /> },
         { path: 'reportCreate', element: <ReportCreate/> },
         { path: 'statistic', element: <Statistic/> },
+        { path: 'report', element: <Statistic/> },
+        { path: 'hisobotlars', element: <Statistic/> },
         {
           path: 'notifications',
           element: <Notifications />,

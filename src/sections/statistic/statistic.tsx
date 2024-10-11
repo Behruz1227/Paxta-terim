@@ -5,19 +5,25 @@ import {
 } from '@mui/material';
 import { DashboardContent } from 'src/layouts/dashboard';
 import useGet from 'src/hooks/get';
-import { statistic } from 'src/hooks/api/url';
+import { report_time, statistic } from 'src/hooks/api/url';
+import { Button } from 'antd';
 
 const Statistic: React.FC = () => {
   const { data, error, get: getDistricts, isLoading } = useGet();
-  
+
   // State for date and time
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  const { get: reports, data: reportsTime, isLoading: reportsLoading } = useGet();
 
   useEffect(() => {
     const [hour, minute] = time.split(':');
     getDistricts(`${statistic}?date=${date}&hour=${hour}&minute=${minute}`);
   }, [date, time]);
+
+  useEffect(() => {
+    reports(`${report_time}`);
+  }, []);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);
@@ -48,7 +54,7 @@ const Statistic: React.FC = () => {
         >
           Қашқадарё вилоятида мавсумда қатнашадиган пахта териш машиналарининг ишлаши тўғрисида
         </Typography>
-        
+
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', gap: '20px' }}>
           <TextField
             label="Sana"
@@ -59,15 +65,28 @@ const Statistic: React.FC = () => {
               shrink: true,
             }}
           />
-          <TextField
-            label="Vaqt"
-            type="time"
-            value={time}
-            onChange={handleTimeChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
+          <div>
+            {reportsTime?.map((time: string, index: number) => {
+              const [hour, minute] = time.split(":");
+
+              return (
+                <Button
+                  key={index}
+                  variant={time === time ? "contained" : "outlined"}
+                  onClick={() => {
+                    setTime(time);
+                    // Tanlangan vaqtni logga chiqarish
+                    console.log(`Tanlangan vaqt: ${hour}:${minute}`);
+                  }}
+                  style={{ margin: "4px" }}
+                >
+                  {hour}:{minute !== "0" ? minute : ""}
+                </Button>
+              );
+            })}
+          </div>
+
+
         </div>
 
         <Table

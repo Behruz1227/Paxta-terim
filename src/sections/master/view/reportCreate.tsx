@@ -56,9 +56,6 @@ const ReportView: React.FC = () => {
     useEffect(() => {
         reports(`${report_time}`);
     }, []);
-    console.log(reportsTime);
-
-
     useEffect(() => {
         if (farmId) {
             cottom(`${cottom_get}/${farmId}`);
