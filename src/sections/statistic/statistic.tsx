@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography,
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, CircularProgress,
+  TextField,
 } from '@mui/material';
 import { DashboardContent } from 'src/layouts/dashboard';
 import useGet from 'src/hooks/get';
@@ -8,10 +9,23 @@ import { statistic } from 'src/hooks/api/url';
 
 const Statistic: React.FC = () => {
   const { data, error, get: getDistricts, isLoading } = useGet();
+  
+  // State for date and time
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
 
   useEffect(() => {
-    getDistricts(`${statistic}?date=2024-10-12&hour=1&minute=0`);
-  }, []);
+    const [hour, minute] = time.split(':');
+    getDistricts(`${statistic}?date=${date}&hour=${hour}&minute=${minute}`);
+  }, [date, time]);
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(event.target.value);
+  };
+
+  const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTime(event.target.value);
+  };
 
   const getMachineData = (resReportCarList: any[], type: string) => {
     const machine = resReportCarList.find((machine: any) => machine.rusumi === type);
@@ -34,6 +48,28 @@ const Statistic: React.FC = () => {
         >
           Қашқадарё вилоятида мавсумда қатнашадиган пахта териш машиналарининг ишлаши тўғрисида
         </Typography>
+        
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', gap: '20px' }}>
+          <TextField
+            label="Sana"
+            type="date"
+            value={date}
+            onChange={handleDateChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <TextField
+            label="Vaqt"
+            type="time"
+            value={time}
+            onChange={handleTimeChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </div>
+
         <Table
           aria-label="cotton harvesting table"
           sx={{
@@ -87,70 +123,84 @@ const Statistic: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.map((row: any, index: any) => {
-              const ce220Data = getMachineData(row.resReportCarList, 'CE_220');
-              const johnDeereData = getMachineData(row.resReportCarList, 'JOHN_DEERE');
-              const boshiranData = getMachineData(row.resReportCarList, 'BOSHIRAN');
-              const fmWorldData = getMachineData(row.resReportCarList, 'FM_WORLD');
-              const dongFengData = getMachineData(row.resReportCarList, 'DONG_FENG');
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={14} align="center">
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            ) : data?.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={14} align="center">
+                  Маълумот мавжуд эмас
+                </TableCell>
+              </TableRow>
+            ) : (
+              data?.map((row: any, index: any) => {
+                const ce220Data = getMachineData(row.resReportCarList, 'CE_220');
+                const johnDeereData = getMachineData(row.resReportCarList, 'JOHN_DEERE');
+                const boshiranData = getMachineData(row.resReportCarList, 'BOSHIRAN');
+                const fmWorldData = getMachineData(row.resReportCarList, 'FM_WORLD');
+                const dongFengData = getMachineData(row.resReportCarList, 'DONG_FENG');
 
-              return (
-                <TableRow
-                  key={index}
-                  sx={{
-                    '&:nth-of-type(even)': {
-                      backgroundColor: '#f2f2f2',
-                    },
-                    '&:hover': {
-                      backgroundColor: '#e0f7fa',
-                    },
-                  }}
-                >
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {row.districtName}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {row.cambaySoni}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {row.ishlayotgani}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {row.terilganPaxtaMavsumBoshidan}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {ce220Data[0]}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {ce220Data[1]}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {johnDeereData[0]}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {johnDeereData[1]}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {boshiranData[0]}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {boshiranData[1]}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {fmWorldData[0]}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {fmWorldData[1]}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {dongFengData[0]}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
-                    {dongFengData[1]}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                return (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      '&:nth-of-type(even)': {
+                        backgroundColor: '#f2f2f2',
+                      },
+                      '&:hover': {
+                        backgroundColor: '#e0f7fa',
+                      },
+                    }}
+                  >
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {row.districtName}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {row.cambaySoni}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {row.ishlayotgani}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {row.terilganPaxtaMavsumBoshidan}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {ce220Data[0]}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {ce220Data[1]}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {johnDeereData[0]}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {johnDeereData[1]}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {boshiranData[0]}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {boshiranData[1]}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {fmWorldData[0]}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {fmWorldData[1]}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {dongFengData[0]}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {dongFengData[1]}
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            )}
           </TableBody>
         </Table>
       </TableContainer>
