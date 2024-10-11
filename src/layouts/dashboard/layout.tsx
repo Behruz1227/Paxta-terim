@@ -22,7 +22,11 @@ import { HeaderSection } from "../core/header-section";
 import { AccountPopover } from "../components/account-popover";
 import { Badge, IconButton } from "@mui/material";
 import useGet from "src/hooks/get";
-import { notificationCountAdmin, notificationCountUser } from "src/hooks/api/url";
+import {
+  notificationCountAdmin,
+  notificationCountUser,
+} from "src/hooks/api/url";
+import { Link } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -46,8 +50,8 @@ export function DashboardLayout({
   const { data, get } = useGet();
 
   useEffect(() => {
-    get(role === "ROLE_ADMIN" ? notificationCountAdmin : notificationCountUser)
-  }, [])
+    get(role === "ROLE_ADMIN" ? notificationCountAdmin : notificationCountUser);
+  }, []);
 
   const layoutQuery: Breakpoint = "lg";
 
@@ -93,16 +97,17 @@ export function DashboardLayout({
               <Box gap={1} display="flex" alignItems="center">
                 {/* <Searchbar />
                 <LanguagePopover data={_langs} /> */}
-                <IconButton
-                  color={"default"}
-                  onClick={() => {}}
-                  // sx={sx}
-                  // {...other}
-                >
-                  <Badge badgeContent={+data ? +data : 0} color="error">
-                    <Iconify width={24} icon="solar:bell-bing-bold-duotone" />
-                  </Badge>
-                </IconButton>
+                <Link to="/notifications">
+                  <IconButton
+                    color={"default"}
+                    // sx={sx}
+                    // {...other}
+                  >
+                    <Badge badgeContent={+data ? +data : 0} color="error">
+                      <Iconify width={24} icon="solar:bell-bing-bold-duotone" />
+                    </Badge>
+                  </IconButton>
+                </Link>
                 <AccountPopover
                   data={[
                     {
@@ -135,7 +140,6 @@ export function DashboardLayout({
                         />
                       ),
                     },
-                    
                   ]}
                 />
               </Box>
