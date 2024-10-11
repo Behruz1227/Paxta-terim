@@ -14,16 +14,15 @@ import { Main } from "./main";
 import { layoutClasses } from "../classes";
 import { NavMobile, NavDesktop } from "./nav";
 import { navUserData, navAdminData } from "../config-nav-dashboard";
-import { Searchbar } from "../components/searchbar";
+// import { Searchbar } from "../components/searchbar";
 import { _workspaces } from "../config-nav-workspace";
 import { MenuButton } from "../components/menu-button";
 import { LayoutSection } from "../core/layout-section";
 import { HeaderSection } from "../core/header-section";
 import { AccountPopover } from "../components/account-popover";
-import { LanguagePopover } from "../components/language-popover";
-import { NotificationsPopover } from "../components/notifications-popover";
 import { Badge, IconButton } from "@mui/material";
 import useGet from "src/hooks/get";
+import { notificationCountAdmin, notificationCountUser } from "src/hooks/api/url";
 
 // ----------------------------------------------------------------------
 
@@ -47,7 +46,7 @@ export function DashboardLayout({
   const { data, get } = useGet();
 
   useEffect(() => {
-    
+    get(role === "ROLE_ADMIN" ? notificationCountAdmin : notificationCountUser)
   }, [])
 
   const layoutQuery: Breakpoint = "lg";
@@ -100,7 +99,7 @@ export function DashboardLayout({
                   // sx={sx}
                   // {...other}
                 >
-                  <Badge badgeContent={99} color="error">
+                  <Badge badgeContent={+data ? +data : 0} color="error">
                     <Iconify width={24} icon="solar:bell-bing-bold-duotone" />
                   </Badge>
                 </IconButton>
@@ -136,6 +135,7 @@ export function DashboardLayout({
                         />
                       ),
                     },
+                    
                   ]}
                 />
               </Box>
