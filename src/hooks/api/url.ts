@@ -58,10 +58,10 @@ export const notificationCountAdmin:string = `${base_url}notification/count/admi
 export const notificationDelete:string = `${base_url}notification/delete`
 
 
-//Statistika admin 
+// Statistika admin 
 export const statistic = `${base_url}statistic/report`
 
-//Report 
+// Report 
 export const reportAdmin = `${base_url}report/admin`
 
 // Farm Edit 
