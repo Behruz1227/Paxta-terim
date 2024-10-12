@@ -37,6 +37,7 @@ import { DialogContent } from "@mui/material";
 import usePost from "src/hooks/post";
 import toast from "react-hot-toast";
 import useDelete from "src/hooks/delete";
+import { Pagination } from "antd";
 
 export default function Machine() {
   const { data, get, error, isLoading } = useGet();
@@ -60,17 +61,22 @@ export default function Machine() {
     lavozimi: "",
   });
   const [errors, setErrors] = useState<any>({});
-  const { data: response, post, error: postError } = usePost()
+  const { data: response, post, error: postError } = usePost();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const table = useTable();
 
   const openModal = () => {
     setIsModalOpen(true);
-    desGet(getDistirct)
-  }
+    desGet(getDistirct);
+  };
   const closeModal = () => {
     resetValue();
     setIsModalOpen(false);
   };
+
+  console.log(data);
+  
 
   const openDeleteModal = (id: number) => {
     setSelectedItemId(id);
@@ -86,25 +92,27 @@ export default function Machine() {
     closeDeleteModal(); // Modaldan chiqish
   };
   useEffect(() => {
-    get(getMachine);
-    desGet(getDistirct)
+    get(`${getMachine}?page=${currentPage - 1}&size=${pageSize}`);
+    desGet(getDistirct);
   }, []);
+
+  useEffect(() => {
+    get(`${getMachine}?page=${currentPage - 1}&size=${pageSize}`);
+    desGet(getDistirct);
+  }, [pageSize, currentPage]);
 
   useEffect(() => {
     if (response) {
       closeModal();
       toast.success("Mashina qo'shildi");
-      get(getMachine);
+      get(`${getMachine}?page=${currentPage - 1}&size=${pageSize}`);
       resetValue();
       // console.log("Mashina", respo);
-
     } else if (postError) {
       closeModal();
-      toast.error('Xato!');
-
+      toast.error("Xato!");
     }
   }, [response, postError]);
-
 
   const handleChange = (field: string, value: any) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
@@ -154,10 +162,14 @@ export default function Machine() {
     try {
       await post(postMachine, formData);
     } catch {
-      alert('Xato! Iltimos, qayta urinib ko‘ring.');
+      alert("Xato! Iltimos, qayta urinib ko‘ring.");
     }
   };
 
+  const handlePaginationChange = (page: number, size: number) => {
+    setCurrentPage(page);
+    setPageSize(size);
+  };
 
   return (
     <div>
@@ -276,13 +288,26 @@ export default function Machine() {
                   </TableBody>
                 </Table>
               </TableContainer>
+              {Array.isArray(data?.object) && data.object.length > 0 && (
+                <div className="mb-4 mt-2">
+                  <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={data?.totalElements}
+                    onChange={handlePaginationChange}
+                    showSizeChanger={false}
+                  />
+                </div>
+              )}
             </Scrollbar>
           </Card>
         )}
         <Dialog open={isDeleteModalOpen} onClose={closeDeleteModal}>
           <DialogTitle>Ma&apos;lumotni o&apos;chirish</DialogTitle>
           <DialogContent>
-            <Typography>Haqiqatan ham ushbu malumotni o&apos;chirmoqchimisiz?</Typography>
+            <Typography>
+              Haqiqatan ham ushbu malumotni o&apos;chirmoqchimisiz?
+            </Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={closeDeleteModal} color="inherit">
@@ -298,25 +323,22 @@ export default function Machine() {
           open={isModalOpen}
           onClose={closeModal}
           maxWidth="xl"
-
         >
           <DialogTitle>Mashina qo&apos;shish</DialogTitle>
           <DialogContent className="md:min-w-[700px]">
             <Box className="grid md:grid-cols-2 gap-x-10 pt-3">
               <div>
-                <FormControl
-                  fullWidth
-                  error={!!errors.districtId}
-                >
+                <FormControl fullWidth error={!!errors.districtId}>
                   <InputLabel>Tumanni tanlang</InputLabel>
                   <Select
                     value={formData.districtId}
                     onChange={(e) => handleChange("districtId", e.target.value)}
                     label="Tumanni tanlang"
                   >
-                    {desData && desData.map((item: { id: number, name: string }) => (
-                      <MenuItem value={item.id}>{item.name}</MenuItem>
-                    ))}
+                    {desData &&
+                      desData.map((item: { id: number; name: string }) => (
+                        <MenuItem value={item.id}>{item.name}</MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
                 {errors.districtId && (
@@ -360,21 +382,18 @@ export default function Machine() {
                 error={!!errors.machineModel}
                 helperText={errors.machineModel}
               /> */}
-              <FormControl
-                fullWidth
-                error={!!errors.machineModel}
-              >
+              <FormControl fullWidth error={!!errors.machineModel}>
                 <InputLabel>machine madelini tanlang</InputLabel>
                 <Select
                   value={formData.machineModel}
                   onChange={(e) => handleChange("machineModel", e.target.value)}
                   label="machineModel tanlang"
                 >
-                  <MenuItem value='CE_220'>CE_220</MenuItem>
-                  <MenuItem value='JOHN_DEERE'>JOHN_DEERE</MenuItem>
-                  <MenuItem value='BOSHIRAN'>BOSHIRAN</MenuItem>
-                  <MenuItem value='FM_WORLD'>FM_WORLD</MenuItem>
-                  <MenuItem value='DONG_FENG'>DONG_FENG</MenuItem>
+                  <MenuItem value="CE_220">CE_220</MenuItem>
+                  <MenuItem value="JOHN_DEERE">JOHN_DEERE</MenuItem>
+                  <MenuItem value="BOSHIRAN">BOSHIRAN</MenuItem>
+                  <MenuItem value="FM_WORLD">FM_WORLD</MenuItem>
+                  <MenuItem value="DONG_FENG">DONG_FENG</MenuItem>
                 </Select>
               </FormControl>
               <Inputs
@@ -422,7 +441,10 @@ export default function Machine() {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Box mt={2} className='flex flex-col md:flex-row items-end gap-5 justify-center '>
+            <Box
+              mt={2}
+              className="flex flex-col md:flex-row items-end gap-5 justify-center "
+            >
               <Button variant="contained" color="error" onClick={closeModal}>
                 Bekor qilish
               </Button>
