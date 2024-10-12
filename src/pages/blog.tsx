@@ -16,11 +16,11 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
-  Modal,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Scrollbar } from "src/components/scrollbar";
+import { Pagination } from 'antd'
 
 import { CONFIG } from "src/config-global";
 import { getDistirct, getMachine, postMachine } from "src/hooks/api/url";
@@ -37,6 +37,7 @@ import { DialogContent } from "@mui/material";
 import usePost from "src/hooks/post";
 import toast from "react-hot-toast";
 import useDelete from "src/hooks/delete";
+import { log } from "util";
 
 export default function Machine() {
   const { data, get, error, isLoading } = useGet();
@@ -44,6 +45,8 @@ export default function Machine() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState(10);
   // const { remove, data:remData, error:remError, isLoading: remLoad } = useDelete()
   const [formData, setFormData] = useState({
     districtId: 0,
@@ -85,10 +88,19 @@ export default function Machine() {
     console.log("Deleted item with ID:", selectedItemId);
     closeDeleteModal(); // Modaldan chiqish
   };
+  const handlePaginationChange = (page: number, size: number) => {
+    setCurrentPage(page);
+    setPageSize(size);
+  };
+
   useEffect(() => {
-    get(getMachine);
+    get(`${getMachine}?page=${currentPage}&size=${pageSize}`);
     desGet(getDistirct)
-  }, []);
+  }, [currentPage, pageSize]);
+
+  console.log(data);
+  console.log(pageSize);
+
 
   useEffect(() => {
     if (response) {
@@ -158,6 +170,7 @@ export default function Machine() {
     }
   };
 
+  console.log(data);
 
   return (
     <div>
@@ -239,8 +252,7 @@ export default function Machine() {
                           i: number
                         ) => (
                           <TableRow hover>
-                            <TableCell>{i + 1}</TableCell>
-                            {/* <TableCell>{i * 10 + 1}</TableCell> */}
+                            <TableCell>{((currentPage - 1) * 10) + i + 1}</TableCell>
                             <TableCell>{item.district || "-"}</TableCell>
                             <TableCell>{item.farmName || "-"}</TableCell>
                             <TableCell>{item.ownerFullName || "-"}</TableCell>
@@ -275,6 +287,17 @@ export default function Machine() {
                     )}
                   </TableBody>
                 </Table>
+                <div className="mb-4">
+                  {data && (
+                    <Pagination
+                      current={currentPage}
+                      pageSize={pageSize}
+                      total={data.totalElements}
+                      onChange={handlePaginationChange}
+                      showSizeChanger={false}
+                    />
+                  )}
+                </div>
               </TableContainer>
             </Scrollbar>
           </Card>

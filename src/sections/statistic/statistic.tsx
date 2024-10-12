@@ -52,7 +52,7 @@ const Statistic: React.FC = () => {
             marginBottom: 3,
           }}
         >
-          Қашқадарё вилоятида мавсумда қатнашадиган пахта териш машиналарининг ишлаши тўғрисида
+          Қашқадарё вилоятида мавсумда қатнашадиган пахта териш машиналарининг ишлаши тўғрисида МAЛУМОТ
         </Typography>
 
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', gap: '20px' }}>
@@ -102,51 +102,65 @@ const Statistic: React.FC = () => {
           }}
         >
           <TableHead>
-            <TableRow sx={{ backgroundColor: '#f8f9fa' }}>
-              <TableCell align="center" rowSpan={2} sx={{ border: 1, boxShadow: 2 }}>
+            <TableRow>
+
+              <TableCell align="center" className='font-bold'  sx={{ border: 1, boxShadow: 2, backgroundColor: 'white' }}>
+              </TableCell>
+              <TableCell align="center" colSpan={19} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 18, backgroundColor: 'white' }}>
+                Пахта териш машиналари
+              </TableCell>
+
+            </TableRow>
+            <TableRow sx={{ backgroundColor: '#f8f9fa', }}>
+              <TableCell align="center" rowSpan={2} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
                 Туманлар
               </TableCell>
-              <TableCell align="center" colSpan={3} sx={{ border: 1, boxShadow: 2 }}>
-                Мавжуд сон
+              <TableCell align="center" colSpan={3} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
+                Мавжуд сони
               </TableCell>
-              <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2 }}>
+              <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
                 CE-220
               </TableCell>
-              <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2 }}>
+              <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
                 John Deere
               </TableCell>
-              <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2 }}>
-                Boshiran
+              <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
+                BOSHIRAN
               </TableCell>
-              <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2 }}>
-                FM WORLD
+              <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
+                ФМ WОРЛД
               </TableCell>
-              <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2 }}>
-                Dong Feng
+              <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
+                Донг Фенг
               </TableCell>
-              <TableCell align="center" colSpan={5} sx={{ border: 1, boxShadow: 2 }}>
-              Ишламаётганлар сони
+              <TableCell align="center" colSpan={1} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
+
+              </TableCell>
+              <TableCell align="center" colSpan={5} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
+                Ишламаслик сабаблари
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>ПТМ ни жами сони</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Жами сони</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ишлаётгани</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Терилган пахта, тн</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сон</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Терилган пахтаси тн</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сони</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Бир кунда, тн</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сон</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сони</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Бир кунда, тн</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сон</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сони</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Бир кунда, тн</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сон</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сони</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Бир кунда, тн</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сон</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сони</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Бир кунда, тн</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Дала тайёр емаслиги учун</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ташкилотчилик йўқлиги учун</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сервис хизмати учун</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Носозлик учун</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ёқилғи йўқлиги учун</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1,fontWeight:'bold',fontSize:16 }}>Ишламаёт
+                гани</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ёқилғи йетказиб берилмаган</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ростлаш ишлари олиб борилмоқда</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Оператор ( механизатор ) йўқ</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Тамирда</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ташкилий сабаб</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -219,6 +233,9 @@ const Statistic: React.FC = () => {
                     </TableCell>
                     <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
                       {dongFengData[0]}
+                    </TableCell>
+                    <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
+                      {dongFengData[1]}
                     </TableCell>
                     <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>
                       {dongFengData[1]}

@@ -42,6 +42,7 @@ const ReportView: React.FC = () => {
 
     const [ptmMaydoni, setPtmMaydoni] = useState('');  // Paxta maydoni
     const [lastName, setLastName] = useState('');    // Paxta hajmi
+    const [ptmDate, setPtmDate] = useState('');    // Paxta hajmi
     const [phoneNumber, setPhoneNumber] = useState(''); // PTM ishlashi (true/false)
     const [password, setPassword] = useState('');
     const [lavozimi, setLavozimi] = useState(true);
@@ -123,12 +124,16 @@ const ReportView: React.FC = () => {
             dialField: ptmMaydoni ? parseInt(ptmMaydoni) : 0,
             cottonSize: paxtaHajmi ? parseInt(paxtaHajmi) : 0,
             machineActive: lavozimi,
-            downTime: password ? parseInt(password) : null,
+            downHour: parseInt(password.split(':')[0]),
+            downMinute: parseInt(password.split(':')[0]),
             machineStatus: ptmHolati,
+            downDate: new Date(ptmDate).toISOString().split('T')[0],
             date: new Date().toISOString().split('T')[0],
             hour: parseInt(hour.split(':')[0]),
             minute: parseInt(hour.split(':')[1]),
+            
         };
+        
         console.log(reportData);
 
         axios.post(`${reposrtAdd}`, reportData)
@@ -262,7 +267,7 @@ const ReportView: React.FC = () => {
                             </div>
                         </div>
                         <div className='p-4'></div>
-                        Vaqt
+                        Hisobot topshirish sanasi
                         <Inputs
                             label=""
                             value={lastName}
@@ -324,7 +329,15 @@ const ReportView: React.FC = () => {
                                     label="PTM ni ishsiz vaqti"
                                     value={password}
                                     onChange={handleInputChange(setPassword)}
-                                    type="number"
+                                    type="time"
+                                />
+                                <div className='p-4'></div>
+                                PTM ni ishlamagan sanasi
+                                <Inputs
+                                    label=""
+                                    value={ptmDate}
+                                    onChange={handleInputChange(setPtmDate)}
+                                    type="date"
                                 />
 
                             </>
