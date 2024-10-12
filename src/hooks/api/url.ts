@@ -23,7 +23,7 @@ export const districtAdd = `${base_url}district/create`
 // Tumanlarni ko'radi admin 
 export const getDistirct = `${base_url}district/list`
 
-//Tumanlarni delete qilish
+// Tumanlarni delete qilish
 export const editDistrict = `${base_url}district`
 export const deleteDist = `${base_url}district`
 
@@ -31,8 +31,8 @@ export const deleteDist = `${base_url}district`
 // Machine 
 export const getMachine:string = `${base_url}machines/list`
 export const postMachine:string = `${base_url}machines/create`
-export const delMachine:string = `${base_url}user`
-export const putMachine:string = `${base_url}user`
+export const delMachine:string = `${base_url}machines/delete/`
+export const putMachine:string = `${base_url}machines/edit-machine/`
 
 // farms
 export const farms_get:string = `${base_url}farm/list`
