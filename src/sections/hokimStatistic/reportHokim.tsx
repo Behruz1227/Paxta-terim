@@ -43,7 +43,7 @@ const ReportHokims: React.FC = () => {
   const toggleDelModal = () => setIsOpenDelModal(!isOpenDelModal);
   const toggleEditModal = () => setIsOpenEditModal(!isOpenEditModal);
 
-  
+
   useEffect(() => {
     if (!isOpenEditModal || !isOpenEditModal) {
       setFarmInn('');
@@ -124,9 +124,9 @@ const ReportHokims: React.FC = () => {
                   <TableCell align="center">
                     <Typography
                       fontWeight="bold"
-                      style={{ background: item.machineActive ? 'blue' : 'red',color:item.machineActive ? "black" : "black" , padding:5, borderRadius:10 }}
+                      style={{ background: item.machineActive ? '' : '', color: item.machineActive ? "black" : "black", padding: 5, borderRadius: 10 }}
                     >
-                      {item.machineActive ? 'ishlagan' : 'ishlamagan'}
+                      {item.machineActive ? 'Faol  ' : 'Faol emas'}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
@@ -157,16 +157,18 @@ const ReportHokims: React.FC = () => {
           </TableBody>
         </Table>
       </Box>
-      {farmsData && (
-        <Pagination
-          current={currentPage}
-          pageSize={pageSize}
-          total={farmsData.totalElements}
-          onChange={handlePaginationChange}
-          showSizeChanger={false}
-        />
-      )}
-    </div>
+      {
+        farmsData && (
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={farmsData.totalElements}
+            onChange={handlePaginationChange}
+            showSizeChanger={false}
+          />
+        )
+      }
+    </div >
   );
 };
 

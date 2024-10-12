@@ -25,7 +25,7 @@ export const navAdminData = [
   {
     title: 'Mashinalar',
     path: '/machines',
-    icon: icon('ic-blog'),
+    icon: icon('ic-tractor'),
   },
   {
     title: 'Fermalar',
