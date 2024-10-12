@@ -93,7 +93,7 @@ export default function Machine() {
   
   useEffect(() => {
 
-    get(`${getMachine}?page=${currentPage}&size=${pageSize}`);
+    get(`${getMachine}?page=${currentPage-1}&size=${pageSize}`);
     desGet(getDistirct)
   }, [currentPage, pageSize]);
 
