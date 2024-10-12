@@ -17,6 +17,7 @@ import {
     DialogContent,
     DialogTitle,
     DialogActions,
+    CircularProgress,
 } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
@@ -39,11 +40,10 @@ const ReportView: React.FC = () => {
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [isModalDelete, setIsModalDelete] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<string | null>(null);
-
-    const [ptmMaydoni, setPtmMaydoni] = useState('');  // Paxta maydoni
-    const [lastName, setLastName] = useState('');    // Paxta hajmi
-    const [ptmDate, setPtmDate] = useState('');    // Paxta hajmi
-    const [phoneNumber, setPhoneNumber] = useState(''); // PTM ishlashi (true/false)
+    const [ptmMaydoni, setPtmMaydoni] = useState(''); 
+    const [lastName, setLastName] = useState('');   
+    const [ptmDate, setPtmDate] = useState('');    
+    const [phoneNumber, setPhoneNumber] = useState(''); 
     const [password, setPassword] = useState('');
     const [lavozimi, setLavozimi] = useState(true);
     const [ptmHolati, setPtmHolati] = useState(null);
@@ -79,7 +79,8 @@ const ReportView: React.FC = () => {
             setSelectedHududId(selectedHududId);
         }
     };
-
+    console.log(12333232,password);
+    
     const handleRowClick = (id: string, farmId: string) => {
         setSelectedIds((prev) => {
             if (prev.includes(id)) {
@@ -97,17 +98,12 @@ const ReportView: React.FC = () => {
     };
 
     const machineStatusOptions = [
-        'DALA_TAYYOR_EMASLIGI_UCHUN',
-        'TASHKILOTCHILIK_YUQLIGI_UCHUN',
-        'SERVIS_XIZMATI_UCHUN',
-        'NOSOZLIGI_UCHUN',
-        'YOQILGI_YOQLIGI_UCHUN',
+        { value: 'ROSTLASH_ISHLARI_OLIB_BORILMOQDA', label: 'Rostlash ishlari olib borilmoqda' },
+        { value: 'OPERATORI_YUQ', label: 'Operator yo‘q' },
+        { value: 'TAMIRDA', label: 'Ta’mirda' },
+        { value: 'TASHKILIY_SABAB', label: 'Tashkiliy sabab' },
+        { value: 'YOQILGI_YETKAZIB_BERILMAGAN', label: 'Yoqilg‘i yetkazib berilmagan' }
     ];
-
-    const closeModal = () => {
-        setIsModalDelete(false);
-        setItemToDelete(null);
-    };
 
     const del = () => {
         console.log(`Deleting item with id: ${itemToDelete}`);
@@ -117,23 +113,40 @@ const ReportView: React.FC = () => {
     const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
         setter(e.target.value);
     };
+    const Clear = () => {
+        farmId
+    }
 
+    const closeModal = () => {
+        setFarmId(''); 
+        setPtmMaydoni('');
+        setPaxtaHajmi(''); 
+        setLavozimi(false);
+        setPassword(''); 
+        setPtmHolati(null);
+        setPtmDate(''); 
+        setHour(''); 
+        setIsModalDelete(false);
+        setItemToDelete(null);
+    };
     const handleFormSubmit = () => {
         const reportData = {
             farmId: farmId,
             dialField: ptmMaydoni ? parseInt(ptmMaydoni) : 0,
             cottonSize: paxtaHajmi ? parseInt(paxtaHajmi) : 0,
             machineActive: lavozimi,
-            downHour: parseInt(password.split(':')[0]),
-            downMinute: parseInt(password.split(':')[0]),
+            downHour: parseInt(password) ? parseInt(password):0,
+            downMinute: parseInt(password) ? parseInt(password):0,
             machineStatus: ptmHolati,
             downDate: new Date(ptmDate).toISOString().split('T')[0],
             date: new Date().toISOString().split('T')[0],
             hour: parseInt(hour.split(':')[0]),
-            minute: parseInt(hour.split(':')[1]),
-            
+            minute: parseInt(hour.split(':')[0]),
         };
+
+        console.log(ptmDate);
         
+        console.log(1233131,password);
         console.log(reportData);
 
         axios.post(`${reposrtAdd}`, reportData)
@@ -149,7 +162,8 @@ const ReportView: React.FC = () => {
 
         console.log('Form submitted:', reportData);
     };
-
+ 
+   
     return (
         <div className="p-5">
             <FormControl fullWidth>
@@ -179,11 +193,18 @@ const ReportView: React.FC = () => {
                     value={selectedHududId}
                     onChange={handleHududChange}
                 >
-                    {cottomData?.map((hudud: any) => (
-                        <MenuItem key={hudud.cottonPickedId} value={hudud.cottonPickedId}>
-                            Hudud nomi: {hudud.areaName}, sektor: {hudud.sectorNumber}
+                    {cottomLoading ? (
+                        <MenuItem disabled>
+                            <CircularProgress size={24} />
+                            Ma'lumotlar yuklanmoqda...
                         </MenuItem>
-                    ))}
+                    ) : (
+                        cottomData?.map((hudud: any) => (
+                            <MenuItem key={hudud.cottonPickedId} value={hudud.cottonPickedId}>
+                                Hudud nomi: {hudud.areaName}, sektor: {hudud.sectorNumber}
+                            </MenuItem>
+                        ))
+                    )}
                 </Select>
             </FormControl>
 
@@ -251,20 +272,26 @@ const ReportView: React.FC = () => {
                             type="number"
                         />
                         <div className='p-4'></div>
+                        <div>Hisobot topshirish vaqti</div>
                         <div>
-                            <div>Hisobot topshirish vaqti</div>
-                            <div>
-                                {reportsTime?.map((time: any, index: number) => (
-                                    <Button
-                                        key={index}
-                                        variant={time === phoneNumber ? "contained" : "outlined"}
-                                        onClick={() => setHour(time)}
-                                        style={{ margin: "4px" }}
-                                    >
-                                        {time.split(":")[0]}:{time.split(":")[4] !== "00" ? time.split(":")[1] : ""}
-                                    </Button>
-                                ))}
-                            </div>
+                            {reportsTime?.map((time: any, index: number) => (
+                                <Button
+                                    key={index}
+                                    variant={time === phoneNumber ? "contained" : "outlined"}
+                                    onClick={() => {
+                                        setHour(time);
+                                        console.log("Selected time:",time); 
+                                    }}
+                                    sx={{
+                                        margin: "4px",
+                                        backgroundColor: time === phoneNumber ? "#4CAF50 !important" : "#fff", // Force the background color to change
+                                        color: time === phoneNumber ? "#fff" : "#000", // Text color change
+                                        borderColor: time === phoneNumber ? "#4CAF50" : "#000", // Border color change
+                                    }}
+                                >
+                                    {time.split(":")[0]}:{time.split(":")[4] !== "00" ? time.split(":")[1] : ""}
+                                </Button>
+                            ))}
                         </div>
                         <div className='p-4'></div>
                         Hisobot topshirish sanasi
@@ -280,12 +307,13 @@ const ReportView: React.FC = () => {
                                 <div className='flex justify-center '>
                                     <div className='px-8'>
                                         <Button
-                                            variant={lavozimi ? "contained" : "outlined"} // Highlight 'True' when lavozimi is true
+                                            variant={lavozimi ? "contained" : "outlined"}
                                             color="success"
                                             onClick={() => setLavozimi(true)}
                                         >
-                                            True
+                                            Faol
                                         </Button>
+
                                     </div>
                                     <div className='px-8'>
                                         <Button
@@ -293,7 +321,7 @@ const ReportView: React.FC = () => {
                                             color="error"
                                             onClick={() => setLavozimi(false)}
                                         >
-                                            False
+                                            Faol emas
                                         </Button>
                                     </div>
 
@@ -306,8 +334,8 @@ const ReportView: React.FC = () => {
                             </div>
                         ) :
                             <>
-                                <div className='p-4'></div>
-                                Mashina ishlamagnlik sababi
+                                <div className="p-4"></div>
+                                Mashina ishlamaganlik sababi
                                 <FormControl fullWidth disabled={!farmId}>
                                     <InputLabel id="machine-status-label">Mashina holati</InputLabel>
                                     <Select
@@ -317,8 +345,8 @@ const ReportView: React.FC = () => {
                                         onChange={(e) => setPtmHolati(e.target.value)}
                                     >
                                         {machineStatusOptions?.map((option, index) => (
-                                            <MenuItem key={index} value={option}>
-                                                {option}
+                                            <MenuItem key={index} value={option.value}>
+                                                {option.label}
                                             </MenuItem>
                                         ))}
                                     </Select>

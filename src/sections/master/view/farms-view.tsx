@@ -21,6 +21,15 @@ const HisobotView: React.FC = () => {
     const [farmName, setFarmName] = useState('');
     const [farmInn, setFarmInn] = useState('');
     const [cottonPickedId, setCottonPickedId] = useState('');
+    const [ptmMaydoni, setPtmMaydoni] = useState('');  
+    const [lastName, setLastName] = useState('');    
+    const [ptmDate, setPtmDate] = useState('');    
+    const [phoneNumber, setPhoneNumber] = useState(''); 
+    const [password, setPassword] = useState('');
+    const [lavozimi, setLavozimi] = useState(true);
+    const [ptmHolati, setPtmHolati] = useState(null);
+    const [hour, setHour] = useState('');
+    const [paxtaHajmi, setPaxtaHajmi] = useState('');
 
     useEffect(() => {
         getFarms(`${report_get}?page=${currentPage - 1}&size=${pageSize}`);
@@ -37,13 +46,17 @@ const HisobotView: React.FC = () => {
         deleteFarms(farms_global, farmId);
     };
 
-    const handleFarmEdit = () => {
-        editFarm(farms_global, farmId, {
-            farmName,
-            inn: farmInn,
-            cottonPickedId
-        });
+    const handleFarmEdit = (item:any) => {
+        setFarmId(item.farmId);
+        setFarmName(item.farmName);
+        setFarmInn(item.inn);
+        setCottonPickedId(item.cottonPickedId);
+        setPtmMaydoni(item.dialField); 
+        toggleEditModal();
     };
+
+
+     
 
     const toggleDelModal = () => setIsOpenDelModal(!isOpenDelModal);
     const toggleEditModal = () => setIsOpenEditModal(!isOpenEditModal);
@@ -87,7 +100,7 @@ const HisobotView: React.FC = () => {
                             <TableCell align="center">F.I.O</TableCell>
                             <TableCell align="center">Sana</TableCell>
                             <TableCell align="center">Vaqt</TableCell>
-                            <TableCell align="center">Tahrirhlash</TableCell>  
+                            <TableCell align="center">Tahrirhlash</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -140,7 +153,12 @@ const HisobotView: React.FC = () => {
                                         <Typography fontWeight="bold">{item.cottonSize}</Typography>
                                     </TableCell>
                                     <TableCell align="center">
-                                        <Typography fontWeight="bold">{item.machineActive}</Typography>
+                                        <Typography
+                                            fontWeight="bold"
+                                            style={{ background: item.machineActive ? '' : '', color: item.machineActive ? "black" : "black", padding: 5, borderRadius: 10 }}
+                                        >
+                                            {item.machineActive ? 'Faol  ' : 'Faol emas'}
+                                        </Typography>
                                     </TableCell>
                                     <TableCell align="center">
                                         <Typography fontWeight="bold">{item.downTime}</Typography>
@@ -208,9 +226,10 @@ const HisobotView: React.FC = () => {
                     </Button>
                 </Box>
             </Modals>
-            <Modals title="Fermani tahrirlash" open={isOpenEditModal} onClose={toggleEditModal}>
+            <Modals title="Hisobotni tahrirlash" open={isOpenEditModal} onClose={toggleEditModal}>
                 <Box mt={2}>
-                    <Inputs label="Farm nomi" value={farmName} onChange={e => setFarmName(e.target.value)} />
+                Paxta maydoni (gektar)
+                    <Inputs label="Farm nomi" value={ptmMaydoni} onChange={e => setPtmMaydoni(e.target.value)} />
                     <Inputs label="INN" value={farmInn} onChange={e => setFarmInn(e.target.value)} />
                     <Inputs label="Cotton Picked Id" value={cottonPickedId} onChange={e => setCottonPickedId(e.target.value)} />
                     <Box>
