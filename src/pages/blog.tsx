@@ -189,14 +189,14 @@ export default function Machine() {
   const handleDelete = async () => {
     try {
       console.log("Deleted item with ID:", selectId);
-      await remove(delMachine, selectId); 
-      await get(`${getMachine}?page=${currentPage - 1}&size=${pageSize}`); 
-      closeDeleteModal(); 
-    } catch{
-      console.error("Delete process failed: "); 
+      await remove(delMachine, selectId);
+      await get(`${getMachine}?page=${currentPage - 1}&size=${pageSize}`);
+      closeDeleteModal();
+    } catch {
+      console.error("Delete process failed: ");
     }
   };
-  
+
 
 
   return (
