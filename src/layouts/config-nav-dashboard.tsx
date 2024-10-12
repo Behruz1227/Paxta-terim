@@ -25,22 +25,22 @@ export const navAdminData = [
   {
     title: 'Mashinalar',
     path: '/machines',
-    icon: icon('ic-tractor'),
+    icon: icon('ic-blog'),
   },
   {
     title: 'Fermalar',
     path: '/farms',
-    icon: icon('ic-blog'),
+    icon: icon('ic-farm'),
   },
   {
     title: 'Hisobotlar',
     path: '/reports',
-    icon: icon('ic-blog'),
+    icon: icon('ic-report'),
   },
   {
     title: 'Statistik',
     path: '/statistic',
-    icon: icon('ic-blog'),
+    icon: icon('ic-stats'),
   },
 ];
 
