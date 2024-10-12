@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Dialog,
   IconButton,
   Skeleton,
   Table,
@@ -15,7 +16,7 @@ import React, { useEffect, useState } from "react";
 import { Iconify } from "src/components/iconify";
 import { Inputs } from "src/components/input/input";
 import { Modals } from "src/components/modal/modal";
-import { farms_get, farms_global, report_get } from "src/hooks/api/url";
+import { farms_get, farms_global, report_get, ReportEdit } from "src/hooks/api/url";
 import useDelete from "src/hooks/delete";
 import useGet from "src/hooks/get";
 import usePut from "src/hooks/put";
@@ -41,7 +42,7 @@ const HisobotView: React.FC = () => {
   const [farmInn, setFarmInn] = useState("");
   const [cottonPickedId, setCottonPickedId] = useState("");
   const [ptmMaydoni, setPtmMaydoni] = useState("");
-  //   const [lastName, setLastName] = useState("");
+  const [getId, setGetId] = useState(0);
   //   const [ptmDate, setPtmDate] = useState("");
   //   const [phoneNumber, setPhoneNumber] = useState("");
   //   const [password, setPassword] = useState("");
@@ -60,8 +61,8 @@ const HisobotView: React.FC = () => {
     hour: 0,
     minute: 0,
   });
-//   const {data:d} = useDelete()
-const {data:dataPut, error:errorPut, isLoading:LoadPut, put} = usePut()
+  //   const {data:d} = useDelete()
+  const { data: dataPut, error: errorPut, isLoading: LoadPut, put } = usePut()
   useEffect(() => {
     getFarms(`${report_get}?page=${currentPage - 1}&size=${pageSize}`);
   }, [currentPage, pageSize]);
@@ -98,8 +99,8 @@ const {data:dataPut, error:errorPut, isLoading:LoadPut, put} = usePut()
       setFarmName("");
     }
   }, [isOpenEditModal, isOpenEditModal]);
-  const handleEdit = () => {
-
+  const handleFarmEdit = () => {
+    put(ReportEdit)
   }
   return (
     <div className="p-5">
@@ -221,15 +222,6 @@ const {data:dataPut, error:errorPut, isLoading:LoadPut, put} = usePut()
                     >
                       <Iconify icon="solar:pen-bold" />
                     </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        toggleDelModal();
-                        setFarmId(item.farmId);
-                      }}
-                      sx={{ color: "error.main" }}
-                    >
-                      <Iconify icon="solar:trash-bin-trash-bold" />
-                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))
@@ -252,48 +244,82 @@ const {data:dataPut, error:errorPut, isLoading:LoadPut, put} = usePut()
           showSizeChanger={false}
         />
       )}
-      <Modals
-        title="Fermani o'chirish"
-        open={isOpenDelModal}
-        onClose={toggleDelModal}
-      >
-        <Box mt={2}>
-          <Button variant="contained" color="error" onClick={toggleDelModal}>
-            Bekor qilish
-          </Button>
-          <Button
-            variant="contained"
-            disabled={farmsLoading}
-            onClick={handleFarmDelete}
-            color="success"
-            sx={{ ml: 2 }}
-          >
-            {delFarmsLoading ? "Yuklanmoqda..." : "O'chirish"}
-          </Button>
-        </Box>
-      </Modals>
-      <Modals
+      <Dialog
         title="Hisobotni tahrirlash"
         open={isOpenEditModal}
         onClose={toggleEditModal}
       >
-        <Box mt={2}>
-          Paxta maydoni (gektar)
+        <Box className="grid md:grid-cols-2 gap-x-10 pt-3" mt={2}>
           <Inputs
-            label="Farm nomi"
-            value={ptmMaydoni}
-            onChange={(e) => setPtmMaydoni(e.target.value)}
+            label="Farm ID"
+            value={formData.farmId}
+            onChange={(e) => handleChange("ownerFullName", e.target.value)}
+
           />
           <Inputs
-            label="INN"
-            value={farmInn}
-            onChange={(e) => setFarmInn(e.target.value)}
+            label="Dial Field (Gektar)"
+            value={formData.dialField}
+            onChange={(e) => handleChange("ownerFullName", e.target.value)}
+
           />
           <Inputs
-            label="Cotton Picked Id"
-            value={cottonPickedId}
-            onChange={(e) => setCottonPickedId(e.target.value)}
+            label="Cotton Size"
+            value={formData.cottonSize}
+            onChange={(e) => handleChange("ownerFullName", e.target.value)}
+
           />
+          <Inputs
+            label="Machine Active"
+            type="checkbox"
+            checked={formData.machineActive}
+            onChange={(e) => handleChange("ownerFullName", e.target.value)}
+
+          />
+          <Inputs
+            label="Downtime Date"
+            type="date"
+            value={formData.downDate}
+            onChange={(e) => handleChange("ownerFullName", e.target.value)}
+
+          />
+          <Inputs
+            label="Downtime Hour"
+            value={formData.downHour}
+            onChange={(e) => handleChange("ownerFullName", e.target.value)}
+
+          />
+          <Inputs
+            label="Downtime Minute"
+            value={formData.downMinute}
+            onChange={(e) => handleChange("ownerFullName", e.target.value)}
+
+          />
+          <Inputs
+            label="Machine Status"
+            value={formData.machineStatus}
+            onChange={(e) => handleChange("ownerFullName", e.target.value)}
+
+          />
+          <Inputs
+            label="Date"
+            type="date"
+            value={formData.date}
+            onChange={(e) => handleChange("ownerFullName", e.target.value)}
+
+          />
+          <Inputs
+            label="Hour"
+            value={formData.hour}
+            onChange={(e) => handleChange("ownerFullName", e.target.value)}
+
+          />
+          <Inputs
+            label="Minute"
+            value={formData.minute}
+            onChange={(e) => handleChange("ownerFullName", e.target.value)}
+
+          />
+
           <Box>
             <Button variant="contained" onClick={toggleEditModal}>
               Bekor qilish
@@ -308,7 +334,10 @@ const {data:dataPut, error:errorPut, isLoading:LoadPut, put} = usePut()
             </Button>
           </Box>
         </Box>
-      </Modals>
+      </Dialog>
+
+
+
     </div>
   );
 };

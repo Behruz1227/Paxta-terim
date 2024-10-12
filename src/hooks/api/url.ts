@@ -64,4 +64,5 @@ export const statistic = `${base_url}statistic/report`
 //Report 
 export const reportAdmin = `${base_url}report/admin`
 
-
+// Farm Edit 
+export const ReportEdit = `${base_url}report/edit/`
