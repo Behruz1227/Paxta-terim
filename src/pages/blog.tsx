@@ -283,17 +283,6 @@ export default function Machine() {
                     )}
                   </TableBody>
                 </Table>
-                <div className="mb-4">
-                  {data && (
-                    <Pagination
-                      current={currentPage}
-                      pageSize={pageSize}
-                      total={data.totalElements}
-                      onChange={handlePaginationChange}
-                      showSizeChanger={false}
-                    />
-                  )}
-                </div>
               </TableContainer>
               {Array.isArray(data?.object) && data.object.length > 0 && (
                 <div className="mb-4 mt-2">
