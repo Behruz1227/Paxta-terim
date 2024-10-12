@@ -87,8 +87,8 @@ export default function Machine() {
   };
   // console.log(data);
 
-  const openDeleteModal = (id: number) => {
-    setSelectedItemId(id);
+  const openDeleteModal = (id?: number) => {
+    id && setSelectedItemId(id);
     setIsDeleteModalOpen(true);
   };
   const closeDeleteModal = () => {
