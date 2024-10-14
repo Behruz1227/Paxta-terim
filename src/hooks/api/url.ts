@@ -66,3 +66,6 @@ export const reportAdmin = `${base_url}report/admin`
 
 // Farm Edit 
 export const ReportEdit = `${base_url}report/edit/`
+
+// Dowloand excel 
+export const ExcelDowloand = `${base_url}/attachment/download`
