@@ -28,6 +28,9 @@ import usePost from 'src/hooks/post';
 import EditUserModal from '../editModal';
 import useDelete from 'src/hooks/delete';
 import { Pagination } from 'antd';
+import { TableRow } from '@mui/material';
+import { TableCell } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
 
 export function UserView() {
@@ -103,7 +106,7 @@ export function UserView() {
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
-          Users
+          Foydalanuvchilar
         </Typography>
         <Button
           variant="contained"
@@ -111,7 +114,7 @@ export function UserView() {
           startIcon={<Iconify icon="mingcute:add-line" />}
           onClick={openModal}
         >
-          New user
+          Foydalanuvchi qo'shish
         </Button>
       </Box>
       <Card>
@@ -139,12 +142,19 @@ export function UserView() {
                   { id: 'holati', label:"Tahrirlash" },
                 ]}
               />
-              <TableBody>
+              {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={14} align="center">
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+              ):(
+                <TableBody>
                 {data && data.length === 0 ? (
                   <TableNoData searchQuery={filterName} />
                 ) : (
                   Array.isArray(data?.object) &&
-                  data?.object?.map((item: any) => (
+                  data?.object?.map((item: any,index:number) => (
                     <UserTableRow
                       key={item.id}
                       row={item}
@@ -156,6 +166,9 @@ export function UserView() {
                   ))
                 )}
               </TableBody>
+              )
+            }
+              
             </Table>
             {data && (
               <div className='mb-4 mt-2'>

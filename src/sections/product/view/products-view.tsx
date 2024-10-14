@@ -9,6 +9,7 @@ import { deleteDist, districtAdd, editDistrict, getDistirct } from 'src/hooks/ap
 import useDelete from 'src/hooks/delete';
 import usePut from 'src/hooks/put';
 import usePost from 'src/hooks/post';
+import { CircularProgress } from '@mui/material';
 
 export function ProductsView() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -101,7 +102,14 @@ export function ProductsView() {
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={14} align="center">
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            ):(
+              <TableBody>
             {data && data.length > 0 ? (
               data.map((item: any, index: number) => (
                 <TableRow key={index} style={{ cursor: 'pointer' }}>
@@ -127,6 +135,9 @@ export function ProductsView() {
               </TableRow>
             )}
           </TableBody>
+            )
+          }   
+          
         </Table>
 
         {/* Modal for Adding a New District */}
