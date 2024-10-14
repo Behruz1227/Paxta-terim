@@ -201,9 +201,7 @@ export function UserView() {
           </Button>
         </Box>
       </Modals>
-
       {/* Edit modal  start  */}
-
       <Modals title="Фойдаланувчи ўзгартириш" open={isEditModal} onClose={() => setIsEditModal(false)}>
         <Inputs label="Исм киритинг" value={firstname} onChange={e => setFirsName(e.target.value)} />
         <Inputs label="Фамилия киритинг" value={lastName} onChange={e => setLastName(e.target.value)} />

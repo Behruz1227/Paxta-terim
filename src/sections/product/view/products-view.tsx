@@ -82,7 +82,7 @@ export function ProductsView() {
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
-          Tumanlar
+        Туманлар
         </Typography>
         <Button
           variant="contained"
@@ -90,16 +90,16 @@ export function ProductsView() {
           startIcon={<Iconify icon="mingcute:add-line" />}
           onClick={openModal}
         >
-          Tuman qo'shish
+          Туман қўшиш
         </Button>
       </Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">T/r</TableCell>
-              <TableCell align="center">Product Name</TableCell>
-              <TableCell align="center">Actions</TableCell>
+              <TableCell align="center">Т/р</TableCell>
+              <TableCell align="center">Туман номи</TableCell>
+              <TableCell align="center">Таҳрирлаш</TableCell>
             </TableRow>
           </TableHead>
           {isLoading ? (
