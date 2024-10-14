@@ -412,10 +412,6 @@ const HisobotView: React.FC = () => {
           </Button>
         </Box>
       </Dialog>
-
-
-
-
     </div>
   );
 };
