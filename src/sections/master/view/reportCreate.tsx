@@ -40,10 +40,10 @@ const ReportView: React.FC = () => {
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [isModalDelete, setIsModalDelete] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<string | null>(null);
-    const [ptmMaydoni, setPtmMaydoni] = useState(''); 
-    const [lastName, setLastName] = useState('');   
-    const [ptmDate, setPtmDate] = useState('');    
-    const [phoneNumber, setPhoneNumber] = useState(''); 
+    const [ptmMaydoni, setPtmMaydoni] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [ptmDate, setPtmDate] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [lavozimi, setLavozimi] = useState(true);
     const [ptmHolati, setPtmHolati] = useState(null);
@@ -79,8 +79,8 @@ const ReportView: React.FC = () => {
             setSelectedHududId(selectedHududId);
         }
     };
-    console.log(12333232,password);
-    
+    console.log(12333232, password);
+
     const handleRowClick = (id: string, farmId: string) => {
         setSelectedIds((prev) => {
             if (prev.includes(id)) {
@@ -118,14 +118,14 @@ const ReportView: React.FC = () => {
     }
 
     const closeModal = () => {
-        setFarmId(''); 
+        setFarmId('');
         setPtmMaydoni('');
-        setPaxtaHajmi(''); 
+        setPaxtaHajmi('');
         setLavozimi(false);
-        setPassword(''); 
+        setPassword('');
         setPtmHolati(null);
-        setPtmDate(''); 
-        setHour(''); 
+        setPtmDate('');
+        setHour('');
         setIsModalDelete(false);
         setItemToDelete(null);
     };
@@ -135,8 +135,8 @@ const ReportView: React.FC = () => {
             dialField: ptmMaydoni ? parseInt(ptmMaydoni) : 0,
             cottonSize: paxtaHajmi ? parseInt(paxtaHajmi) : 0,
             machineActive: lavozimi,
-            downHour: parseInt(password) ? parseInt(password):0,
-            downMinute: parseInt(password) ? parseInt(password):0,
+            downHour: parseInt(password) ? parseInt(password) : 0,
+            downMinute: parseInt(password) ? parseInt(password) : 0,
             machineStatus: ptmHolati,
             downDate: new Date(ptmDate).toISOString().split('T')[0],
             date: new Date().toISOString().split('T')[0],
@@ -145,8 +145,8 @@ const ReportView: React.FC = () => {
         };
 
         console.log(ptmDate);
-        
-        console.log(1233131,password);
+
+        console.log(1233131, password);
         console.log(reportData);
 
         axios.post(`${reposrtAdd}`, reportData)
@@ -162,8 +162,8 @@ const ReportView: React.FC = () => {
 
         console.log('Form submitted:', reportData);
     };
- 
-   
+
+
     return (
         <div className="p-5">
             <FormControl fullWidth>
@@ -175,11 +175,17 @@ const ReportView: React.FC = () => {
                     label="Tuman tanlang"
                     onChange={(e) => setFarmId(e.target.value as string)}
                 >
-                    {farmsData?.map((farm: any) => (
-                        <MenuItem key={farm.id} value={farm.id}>
-                            {farm.name}
+                    {farmsLoading ? (
+                        <MenuItem disabled>
+                            <CircularProgress size={24} />
+                            Ma'lumotlar yuklanmoqda...
                         </MenuItem>
-                    ))}
+                    ) :
+                        farmsData?.map((farm: any) => (
+                            <MenuItem key={farm.id} value={farm.id}>
+                                {farm.name}
+                            </MenuItem>
+                        ))}
                 </Select>
             </FormControl>
 
@@ -219,8 +225,14 @@ const ReportView: React.FC = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {farmData?.length > 0 ? (
-                            farmData.map((item: any, index: number) => (
+                        {farmLoading ? (
+                            <TableRow>
+                                <TableCell colSpan={14} align="center">
+                                    <CircularProgress />
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            farmData?.map((item: any, index: number) => (
                                 <TableRow
                                     key={index}
                                     style={{ cursor: 'pointer' }}
@@ -240,13 +252,8 @@ const ReportView: React.FC = () => {
                                     </TableCell>
                                 </TableRow>
                             ))
-                        ) : (
-                            <TableRow>
-                                <TableCell colSpan={3} align="center">
-                                    No farms found.
-                                </TableCell>
-                            </TableRow>
-                        )}
+                        )
+                        }
                     </TableBody>
                 </Table>
             </Box>
@@ -274,24 +281,32 @@ const ReportView: React.FC = () => {
                         <div className='p-4'></div>
                         <div>Hisobot topshirish vaqti</div>
                         <div>
-                            {reportsTime?.map((time: any, index: number) => (
-                                <Button
-                                    key={index}
-                                    variant={time === phoneNumber ? "contained" : "outlined"}
-                                    onClick={() => {
-                                        setHour(time);
-                                        console.log("Selected time:",time); 
-                                    }}
-                                    sx={{
-                                        margin: "4px",
-                                        backgroundColor: time === phoneNumber ? "#4CAF50 !important" : "#fff", // Force the background color to change
-                                        color: time === phoneNumber ? "#fff" : "#000", // Text color change
-                                        borderColor: time === phoneNumber ? "#4CAF50" : "#000", // Border color change
-                                    }}
-                                >
-                                    {time.split(":")[0]}:{time.split(":")[4] !== "00" ? time.split(":")[1] : ""}
-                                </Button>
-                            ))}
+                            {reportsLoading ? (
+                                <MenuItem disabled>
+                                    <CircularProgress size={24} />
+                                    Ma'lumotlar yuklanmoqda...
+                                </MenuItem>
+                            ) : (
+                                reportsTime?.map((time: any, index: number) => (
+                                    <Button
+                                        key={index}
+                                        variant={time === phoneNumber ? "contained" : "outlined"}
+                                        onClick={() => {
+                                            setHour(time);
+                                            console.log("Selected time:", time);
+                                        }}
+                                        sx={{
+                                            margin: "4px",
+                                            backgroundColor: time === phoneNumber ? "#4CAF50 !important" : "#fff", // Force the background color to change
+                                            color: time === phoneNumber ? "#fff" : "#000", // Text color change
+                                            borderColor: time === phoneNumber ? "#4CAF50" : "#000", // Border color change
+                                        }}
+                                    >
+                                        {time.split(":")[0]}:{time.split(":")[4] !== "00" ? time.split(":")[1] : ""}
+                                    </Button>
+                                ))
+                            )
+                            }
                         </div>
                         <div className='p-4'></div>
                         Hisobot topshirish sanasi
