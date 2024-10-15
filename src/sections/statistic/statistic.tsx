@@ -158,7 +158,8 @@ const Statistic: React.FC = () => {
                 гани</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ёқилғи йетказиб берилмаган</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ростлаш ишлари олиб борилмоқда</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Оператор ( механизатор ) йўқ</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Оператор     
+                (механизатор)  йўқ</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Тамирда</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ташкилий сабаб</TableCell>
             </TableRow>
