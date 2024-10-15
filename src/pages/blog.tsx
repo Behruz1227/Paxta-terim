@@ -202,7 +202,7 @@ export default function Machine() {
   return (
     <div>
       <Helmet>
-        <title>{`Machine - ${CONFIG.appName}`}</title>
+        <title>{`${CONFIG.appName}`}</title>
       </Helmet>
       <DashboardContent>
         <Box display="flex" alignItems="center" mb={5}>

@@ -11,7 +11,7 @@ export default function Notifications() {
   return (
     <>
       <Helmet>
-        <title> {`Notification - ${CONFIG.appName}`}</title>
+        <title> {`${CONFIG.appName}`}</title>
       </Helmet>
 
       <NotificationView />
