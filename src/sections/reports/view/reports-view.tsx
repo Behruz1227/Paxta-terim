@@ -71,7 +71,7 @@ const ReportsView: React.FC = () => {
 
   return (
     <div className='p-5'>
-      <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
+      <Box sx={{ maxHeight: '1200px', overflowY: 'auto' }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>

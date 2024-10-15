@@ -8,7 +8,7 @@ const ReportCreate: React.FC = () => {
     return (
         <>
             <Helmet>
-                <title> {`Products - ${CONFIG.appName}`}</title>
+                <title> {`${CONFIG.appName}`}</title>
             </Helmet>
 
             <ReportView/>

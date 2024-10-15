@@ -52,7 +52,8 @@ const Statistic: React.FC = () => {
             marginBottom: 3,
           }}
         >
-          Қашқадарё вилоятида мавсумда қатнашадиган пахта териш машиналарининг ишлаши тўғрисида МAЛУМОТ
+          Қашқадарё вилоятида мавсумда қатнашадиган пахта териш машиналарининг ишлаши тўғрисида <br />
+           МA' ЛУМОТ
         </Typography>
 
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', gap: '20px' }}>
