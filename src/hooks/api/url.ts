@@ -68,4 +68,4 @@ export const reportAdmin = `${base_url}report/admin`
 export const ReportEdit = `${base_url}report/edit/`
 
 // Dowloand excel 
-export const ExcelDowloand = `${base_url}/attachment/download`
+export const ExcelDowloand = `${base_url}attachment/download`
