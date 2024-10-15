@@ -136,7 +136,6 @@ const HisobotView: React.FC = () => {
   const handleFarmEdit = async () => {
     try {
       await put(ReportEdit, getId, formData);
-      // console.log(dataPut);
       console.log(getId);
 
     } catch (error) {
