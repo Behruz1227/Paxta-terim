@@ -18,6 +18,7 @@ import { useDeletes } from 'src/hooks/logic/state-managment/user';
 // ----------------------------------------------------------------------
 
 export type UserProps = {
+  index:number;
   id: string;
   firstName: string;
   lastName: string;
@@ -38,7 +39,7 @@ type UserTableRowProps = {
 
 export function UserTableRow({ row, selected, onSelectRow, onEdit, onDelete }: UserTableRowProps) {
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
-  const {setId} = useDeletes()
+  const { setId } = useDeletes()
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenPopover(event.currentTarget);
@@ -53,14 +54,14 @@ export function UserTableRow({ row, selected, onSelectRow, onEdit, onDelete }: U
   const handleDelete = () => {
     setId(row.id)
     onDelete(row.id);
-  
+
   };
 
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
         <TableCell component="th" scope="row">
-        {row.firstName}
+          {row.firstName}
         </TableCell>
         <TableCell>{row.lastName}</TableCell>
 

@@ -116,7 +116,7 @@ const Statistic: React.FC = () => {
                 Туманлар
               </TableCell>
               <TableCell align="center" colSpan={3} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
-                Мавжуд сони
+                
               </TableCell>
               <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
                 CE-220
@@ -128,10 +128,10 @@ const Statistic: React.FC = () => {
                 BOSHIRAN
               </TableCell>
               <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
-                ФМ WОРЛД
+                FM WORLD
               </TableCell>
               <TableCell align="center" colSpan={2} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
-                Донг Фенг
+                Dong feng
               </TableCell>
               <TableCell align="center" colSpan={1} sx={{ border: 1, boxShadow: 2, fontWeight: 'bold', fontSize: 15 }}>
 
@@ -142,8 +142,8 @@ const Statistic: React.FC = () => {
             </TableRow>
             <TableRow>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Жами сони</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ишлаётгани</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Терилган пахта йил бошидан ,тн</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Шундан ишламаётгани</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Терилган пахта йил бошидан, тн</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сони</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Бир кунда, тн</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Сони</TableCell>
@@ -156,9 +156,10 @@ const Statistic: React.FC = () => {
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Бир кунда, тн</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1,fontWeight:'bold',fontSize:16 }}>Ишламаёт
                 гани</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ёқилғи йетказиб берилмаган</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ёқилғи етказиб берилмаган</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ростлаш ишлари олиб борилмоқда</TableCell>
-              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Оператор ( механизатор ) йўқ</TableCell>
+              <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Оператор     
+                (механизатор)  йўқ</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Тамирда</TableCell>
               <TableCell align="center" sx={{ border: 1, boxShadow: 1 }}>Ташкилий сабаб</TableCell>
             </TableRow>

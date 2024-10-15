@@ -202,12 +202,12 @@ export default function Machine() {
   return (
     <div>
       <Helmet>
-        <title>{`Machine - ${CONFIG.appName}`}</title>
+        <title>{`${CONFIG.appName}`}</title>
       </Helmet>
       <DashboardContent>
         <Box display="flex" alignItems="center" mb={5}>
           <Typography variant="h4" flexGrow={1}>
-            Mashinalar
+          Машиналар
           </Typography>
           <Button
             variant="contained"
@@ -215,7 +215,7 @@ export default function Machine() {
             startIcon={<Iconify icon="mingcute:add-line" />}
             onClick={openModal}
           >
-            Yangi qo&apos;shish
+           Машина қўшиш
           </Button>
         </Box>
         {isLoading ? (
@@ -242,19 +242,19 @@ export default function Machine() {
                       )
                     }
                     headLabel={[
-                      { id: "index", label: "T/R" },
-                      { id: "district", label: "Tuman" },
-                      { id: "farmName", label: "Fermer xo'jaligi nomi" },
-                      { id: "ownerFullName", label: "Egasi" },
-                      { id: "ownerPhoneNumber", label: "Egasi telefon raqami" },
-                      { id: "machineId", label: "Mashina ID" },
-                      { id: "machineModel", label: "Model" },
-                      { id: "year", label: "Yil" },
-                      { id: "firstName", label: "Ism" },
-                      { id: "lastName", label: "Familiya" },
-                      { id: "lavozimi", label: "Lavozimi" },
-                      { id: "phoneNumber", label: "Telefon raqam" },
-                      { id: "qushimcha", label: "Qushimcha" },
+                      { id: "index", label: "Т/Р" },
+                      { id: "district", label: "Туман" },
+                      { id: "farmName", label: "Фермер хўжалиги номи" },
+                      { id: "ownerFullName", label: "Егаси" },
+                      { id: "ownerPhoneNumber", label: "Егаси телефон рақами" },
+                      { id: "machineId", label: "Машина ИД" },
+                      { id: "machineModel", label: "Модел" },
+                      { id: "year", label: "Йил" },
+                      { id: "firstName", label: "Исм" },
+                      { id: "lastName", label: "Фамилия" },
+                      { id: "lavozimi", label: "Лавозими" },
+                      { id: "phoneNumber", label: "Телефон рақам" },
+                      { id: "qushimcha", label: "Таҳрирлаш" },
                     ]}
                   />
 
@@ -514,16 +514,16 @@ export default function Machine() {
           onClose={closeModalEdit}
           maxWidth="xl"
         >
-          <DialogTitle>Mashinani tahrirlash</DialogTitle>
+          <DialogTitle>Машинани таҳрирлаш</DialogTitle>
           <DialogContent className="md:min-w-[700px]">
             <Box className="grid md:grid-cols-2 gap-x-10 pt-3">
               <div>
                 <FormControl fullWidth error={!!errors.districtId}>
-                  <InputLabel>Tumanni tanlang</InputLabel>
+                  <InputLabel>Туманни танланг</InputLabel>
                   <Select
                     value={formData.districtId}
                     onChange={(e) => handleChange("districtId", e.target.value)}
-                    label="Tumanni tanlang"
+                    label="Туманни танланг"
                   >
                     {desData &&
                       desData.map((item: { id: number; name: string }) => (

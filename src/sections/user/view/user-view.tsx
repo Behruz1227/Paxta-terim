@@ -28,6 +28,9 @@ import usePost from 'src/hooks/post';
 import EditUserModal from '../editModal';
 import useDelete from 'src/hooks/delete';
 import { Pagination } from 'antd';
+import { TableRow } from '@mui/material';
+import { TableCell } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
 
 export function UserView() {
@@ -103,7 +106,7 @@ export function UserView() {
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
-          Users
+          Фойдаланувчилар
         </Typography>
         <Button
           variant="contained"
@@ -111,7 +114,7 @@ export function UserView() {
           startIcon={<Iconify icon="mingcute:add-line" />}
           onClick={openModal}
         >
-          New user
+          Фойдаланувчи қўшиш
         </Button>
       </Box>
       <Card>
@@ -136,26 +139,36 @@ export function UserView() {
                   { id: 'role', label: 'Telefon raqam' },
                   { id: 'isVerified', label: 'Lavozimi', align: 'center' },
                   { id: 'status', label: 'Active' },
-                  { id: 'holati', label:"Tahrirlash" },
+                  { id: 'holati', label: "Tahrirlash" },
                 ]}
               />
-              <TableBody>
-                {data && data.length === 0 ? (
-                  <TableNoData searchQuery={filterName} />
-                ) : (
-                  Array.isArray(data?.object) &&
-                  data?.object?.map((item: any) => (
-                    <UserTableRow
-                      key={item.id}
-                      row={item}
-                      selected={table.selected.includes(item.id)}
-                      onSelectRow={() => table.onSelectRow(item.id)}
-                      onDelete={() => deleteModal()}
-                      onEdit={() => editModal()}
-                    />
-                  ))
-                )}
-              </TableBody>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={14} align="center">
+                    <CircularProgress />
+                  </TableCell>
+                </TableRow>
+              ) : (
+                <TableBody>
+                  {data && data.length === 0 ? (
+                    <TableNoData searchQuery={filterName} />
+                  ) : (
+                    Array.isArray(data?.object) &&
+                    data?.object?.map((item: any, index: number) => (
+                      <UserTableRow
+                        key={item.id}
+                        row={item}
+                        selected={table.selected.includes(item.id)}
+                        onSelectRow={() => table.onSelectRow(item.id)}
+                        onDelete={() => deleteModal()}
+                        onEdit={() => editModal()}
+                      />
+                    ))
+                  )}
+                </TableBody>
+              )
+              }
+
             </Table>
             {data && (
               <div className='mb-4 mt-2'>
@@ -173,50 +186,48 @@ export function UserView() {
         </Scrollbar>
       </Card>
 
-      <Modals title="Foydalanuvchi qo'shish" open={isModalOpen} onClose={closeModal}>
-        <Inputs label="Ism kiriting" value={firstname} onChange={handleInputChange(setFirsName)} />
-        <Inputs label="Familiya kiriting" value={lastName} onChange={handleInputChange(setLastName)} />
-        <Inputs label="Telefon no'mer kiriting" value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} />
-        <Inputs label="Parol kiriting" value={password} onChange={handleInputChange(setPassword)} />
-        <Inputs label="Lavozim kiriting" value={lavozimi} onChange={handleInputChange(setLavozimi)} />
+      <Modals title="Фойдаланувчи қўшиш" open={isModalOpen} onClose={closeModal}>
+        <Inputs label="Исм киритинг" value={firstname} onChange={handleInputChange(setFirsName)} />
+        <Inputs label="Фамилия киритинг" value={lastName} onChange={handleInputChange(setLastName)} />
+        <Inputs label="Телефон нўмер киритинг" value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} />
+        <Inputs label="Парол киритинг" value={password} onChange={handleInputChange(setPassword)} />
+        <Inputs label="Лавозим киритинг" value={lavozimi} onChange={handleInputChange(setLavozimi)} />
         <Box mt={2}>
           <Button variant="contained" color="error" onClick={closeModal}>
-            Bekor qilish
+            Бекор қилиш
           </Button>
           <Button variant="contained" color="success" onClick={handleFormSubmit} sx={{ ml: 2 }}>
-            Foydalanuvchi qo'shish
+            Фойдаланувчи қўшиш
           </Button>
         </Box>
       </Modals>
-
       {/* Edit modal  start  */}
-
-      <Modals title="Foydalanuvchi o'zgartirish" open={isEditModal} onClose={() => setIsEditModal(false)}>
-        <Inputs label="Ism kiriting" value={firstname} onChange={handleInputChange(setFirsName)} />
-        <Inputs label="Familiya kiriting" value={lastName} onChange={handleInputChange(setLastName)} />
-        <Inputs label="Telefon no'mer kiriting" value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} />
-        <Inputs label="Parol kiriting" value={password} onChange={handleInputChange(setPassword)} />
-        <Inputs label="Lavozim kiriting" value={lavozimi} onChange={handleInputChange(setLavozimi)} />
+      <Modals title="Фойдаланувчи ўзгартириш" open={isEditModal} onClose={() => setIsEditModal(false)}>
+        <Inputs label="Исм киритинг" value={firstname} onChange={e => setFirsName(e.target.value)} />
+        <Inputs label="Фамилия киритинг" value={lastName} onChange={e => setLastName(e.target.value)} />
+        <Inputs label="Телефон нўмер киритинг" value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} />
+        <Inputs label="Парол киритинг" value={password} onChange={handleInputChange(setPassword)} />
+        <Inputs label="Лавозим киритинг" value={lavozimi} onChange={handleInputChange(setLavozimi)} />
         <Box mt={2}>
           <Button variant="contained" color="error" onClick={() => setIsEditModal(false)}>
-            Bekor qilish
+            Бекор қилиш
           </Button>
           <Button variant="contained" color="success" onClick={handleFormSubmit} sx={{ ml: 1 }}>
-            O'zgartirish
+            Ўзгартириш
           </Button>
         </Box>
       </Modals>
 
       {/* Edit modal end */}
       {/* Delete modal start */}
-      <Modals title="Foydalanuvchi o'chirish" open={isDelete} onClose={closeDelete}>
-        Siz haqiqatdan ham shu foddalanuvchini tizimdan o'chirmoqchimisiz ?
+      <Modals title="Фойдаланувчи ўчириш" open={isDelete} onClose={closeDelete}>
+        Сиз ҳақиқатдан ҳам шу фойдаланувчини тизимдан ўчирмоқчимисиз ?
         <Box mt={2}>
           <Button variant="contained" color="error" onClick={closeDelete}>
-            Yo'q
+            Йўқ
           </Button>
           <Button variant="contained" color="success" onClick={del} sx={{ ml: 1 }}>
-            Ha
+            Ҳа
           </Button>
         </Box>
       </Modals>

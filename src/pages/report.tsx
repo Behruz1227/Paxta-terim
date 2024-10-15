@@ -11,7 +11,7 @@ export default function Page() {
   return (
     <>
       <Helmet>
-        <title> {`Report - ${CONFIG.appName}`}</title>
+        <title> {`${CONFIG.appName}`}</title>
       </Helmet>
 
       <ReportsView />

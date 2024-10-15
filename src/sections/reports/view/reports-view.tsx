@@ -147,7 +147,7 @@ const ReportsView: React.FC = () => {
                       fontWeight="bold"
                       style={{ background: item.machineActive ? 'blue' : 'red',color:item.machineActive ? "black" : "black" , padding:5, borderRadius:10 }}
                     >
-                      {item.machineActive ? 'ishlagan' : 'ishlamagan'}
+                      {item.machineActive ? 'Faol' : 'Faol emas'}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">

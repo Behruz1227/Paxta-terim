@@ -8,37 +8,37 @@ const icon = (name: string) => (
 
 export const navAdminData = [
   {
-    title: 'Boshqaruv paneli',
+    title: 'Бошқарув панели',
     path: '/dashboard',
     icon: icon('ic-analytics'),
   },
   {
-    title: 'Foydalanuvchilar',
+    title: 'Фойдаланувчилар',
     path: '/user',
     icon: icon('ic-user'),
   },
   {
-    title: 'Tumanlar',
+    title: 'Туманлар',
     path: '/districts',
     icon: icon('ic-cart'),
   },
   {
-    title: 'Mashinalar',
+    title: 'Машиналар',
     path: '/machines',
     icon: icon('ic-blog'),
   },
   {
-    title: 'Fermalar',
+    title: 'Фермалар',
     path: '/farms',
     icon: icon('ic-farm'),
   },
   {
-    title: 'Hisobotlar',
+    title: 'Ҳисоботлар',
     path: '/reports',
     icon: icon('ic-report'),
   },
   {
-    title: 'Statistik',
+    title: 'Статистика ',
     path: '/statistic',
     icon: icon('ic-stats'),
   },
@@ -46,12 +46,12 @@ export const navAdminData = [
 
 export const navUserData = [
   {
-    title: 'Hisobotlar',
+    title: 'Ҳисоботлар',
     path: '/hisobotlar',
     icon: icon('ic-analytics'),
   },
   {
-    title: "Hisobot qo'shish",
+    title: "Ҳисобот қўшиш",
     path: '/reportCreate',
     icon: icon('ic-analytics'),
   },
@@ -60,12 +60,12 @@ export const navUserData = [
 
 export const navUser = [
   {
-    title: 'Statistik',
+    title: 'Статистика ',
     path: '/hisobotlars',
     icon: icon('ic-analytics'),
   },
   {
-    title: 'Hisobotlar',
+    title: 'Ҳисоботлар',
     path: '/reportlar',
     icon: icon('ic-analytics'),
   },

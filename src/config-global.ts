@@ -10,6 +10,6 @@ export type ConfigValue = {
 // ----------------------------------------------------------------------
 
 export const CONFIG: ConfigValue = {
-  appName: 'Paxta terim',
+  appName: 'ПТМ мониторинг тизими',
   appVersion: packageJson.version,
 };

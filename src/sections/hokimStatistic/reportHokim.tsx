@@ -54,25 +54,25 @@ const ReportHokims: React.FC = () => {
 
   return (
     <div className='p-5'>
-      <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
+      <Box sx={{ maxHeight: '800px', overflowY: 'auto' }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell align="center">T/r</TableCell>
-              <TableCell align="center">PTM model</TableCell>
-              <TableCell align="center">Tuman</TableCell>
-              <TableCell align="center">Sektor</TableCell>
-              <TableCell align="center">Hudud</TableCell>
-              <TableCell align="center">Fermer xo'jalik</TableCell>
-              <TableCell align="center">Maydoni</TableCell>
-              <TableCell align="center">Paxta hajmi</TableCell>
-              <TableCell align="center">PTM holati</TableCell>
-              <TableCell align="center">PTM ishlamagan sanasi</TableCell>
-              <TableCell align="center">Ishlamagan vaqti</TableCell>
-              <TableCell align="center">Ishlamaslik sababi</TableCell>
-              <TableCell align="center">F.I.O</TableCell>
-              <TableCell align="center">Sana</TableCell>
-              <TableCell align="center">Vaqt</TableCell>
+              <TableCell align="center">Т/р</TableCell>
+              <TableCell align="center">ПТМ модел</TableCell>
+              <TableCell align="center">Туман</TableCell>
+              <TableCell align="center">Сектор</TableCell>
+              <TableCell align="center">Ҳудуд</TableCell>
+              <TableCell align="center">Фермер хўжалик</TableCell>
+              <TableCell align="center">Майдони</TableCell>
+              <TableCell align="center">Пахта ҳажми</TableCell>
+              <TableCell align="center">ПТМ ҳолати</TableCell>
+              <TableCell align="center">ПТМ ишламаган санаси</TableCell>
+              <TableCell align="center">Ишламаган вақти</TableCell>
+              <TableCell align="center">Ишламаслик сабаби</TableCell>
+              <TableCell align="center">Ф.И.О</TableCell>
+              <TableCell align="center">Сана</TableCell>
+              <TableCell align="center">Вақт</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
