@@ -111,12 +111,27 @@ const Statistic: React.FC = () => {
             </select>
           </div>
           {data ? (
-            <div>
-              <button style={{ padding: '8px 16px',border:'1px solid', borderRadius:20 , marginLeft:40}} onClick={() => {
-                downloadFile(`${ExcelDowloand}?date=${date}&hour=${hour}&minute=${minute}`)
-              }}>Ҳисоборни юклаб олиш</button>
-            </div>
-          ) : null}
+  <div>
+    <button
+      style={{
+        padding: '8px 16px',
+        border: '1px solid',
+        borderRadius: 20,
+        marginLeft: 40,
+        backgroundImage: 'linear-gradient(to right, #4b79a1, #283e51)', 
+        color: 'white', 
+        borderColor: '#4b79a1', 
+        cursor: 'pointer' 
+      }}
+      onClick={() => {
+        downloadFile(`${ExcelDowloand}?date=${date}&hour=${hour}&minute=${minute}`);
+      }}
+    >
+      Ҳисоботни юклаб олиш
+    </button>
+  </div>
+) : null}
+
 
         </div>
         <Table
