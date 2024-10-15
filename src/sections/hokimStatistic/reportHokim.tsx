@@ -71,8 +71,8 @@ const ReportHokims: React.FC = () => {
               <TableCell align="center">Ишламаган вақти</TableCell>
               <TableCell align="center">Ишламаслик сабаби</TableCell>
               <TableCell align="center">Ф.И.О</TableCell>
-              <TableCell align="center">Sana</TableCell>
-              <TableCell align="center">Vaqt</TableCell>
+              <TableCell align="center">Сана</TableCell>
+              <TableCell align="center">Вақт</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
